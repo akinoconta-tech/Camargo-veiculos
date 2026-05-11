@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Camargo">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camargo Veiculos</title>
+<style>
+
+
+
+:root {
+  --bg:#0d0f14;--surface:#151820;--surface2:#1c2030;--border:#262c3d;
+  --accent:#e8a020;--accent2:#f0c060;--green:#22c55e;--red:#ef4444;
+  --purple:#a855f7;--blue:#3b82f6;--text:#e8eaf0;--muted:#6b7280;
+  --card-shadow:0 4px 24px rgba(0,0,0,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-text{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.5rem;letter-spacing:2px;}
+.logo-text span{color:var(--accent);}
+.header-date{color:var(--muted);font-size:0.85rem;}
+nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 2rem;overflow-x:auto;}
+.nav-tab{padding:14px 20px;cursor:pointer;font-size:0.9rem;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+main{padding:2rem;max-width:1400px;margin:0 auto;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:2rem;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;box-shadow:var(--card-shadow);position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi-card.gold::before{background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.kpi-card.green::before{background:var(--green);}
+.kpi-card.red::before{background:var(--red);}
+.kpi-card.blue::before{background:var(--blue);}
+.kpi-card.purple::before{background:var(--purple);}
+.kpi-label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.kpi-value{font-family:'Impact','Arial Narrow',sans-serif;font-size:2rem;letter-spacing:1px;line-height:1;}
+.kpi-card.gold .kpi-value{color:var(--accent);}
+.kpi-card.green .kpi-value{color:var(--green);}
+.kpi-card.red .kpi-value{color:var(--red);}
+.kpi-card.blue .kpi-value{color:var(--blue);}
+.kpi-card.purple .kpi-value{color:var(--purple);}
+.kpi-sub{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.section{display:none;}
+.section.active{display:block;}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:2rem;box-shadow:var(--card-shadow);}
+.form-title{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:1.25rem;color:var(--accent);}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.25rem;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;font-weight:500;}
+.form-group input,.form-group select,.form-group textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.9rem;transition:border-color 0.2s;outline:none;}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent);}
+.form-group select option{background:var(--surface2);}
+.btn{padding:11px 24px;border:none;border-radius:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-danger{background:transparent;border:1px solid var(--red);color:var(--red);padding:6px 12px;font-size:0.8rem;}
+.btn-danger:hover{background:var(--red);color:#fff;}
+.btn-success{background:transparent;border:1px solid var(--green);color:var(--green);padding:6px 12px;font-size:0.8rem;}
+.btn-success:hover{background:var(--green);color:#fff;}
+.btn-purple{background:transparent;border:1px solid var(--purple);color:var(--purple);padding:6px 12px;font-size:0.8rem;}
+.btn-purple:hover{background:var(--purple);color:#fff;}
+.btn-blue{background:transparent;border:1px solid var(--blue);color:var(--blue);padding:6px 12px;font-size:0.8rem;}
+.btn-blue:hover{background:var(--blue);color:#fff;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);padding:10px 18px;}
+.btn-ghost:hover{border-color:var(--text);color:var(--text);}
+.btn-sm{padding:5px 10px!important;font-size:0.78rem!important;}
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--card-shadow);}
+.table-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.table-title{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--accent);}
+.search-input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.85rem;outline:none;width:220px;}
+.search-input:focus{border-color:var(--accent);}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--surface2);}
+th{text-align:left;padding:12px 16px;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;white-space:nowrap;}
+td{padding:11px 16px;font-size:0.88rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,0.02);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:600;}
+.badge-green{background:rgba(34,197,94,0.15);color:var(--green);}
+.badge-red{background:rgba(239,68,68,0.15);color:var(--red);}
+.badge-yellow{background:rgba(232,160,32,0.15);color:var(--accent);}
+.badge-blue{background:rgba(59,130,246,0.15);color:var(--blue);}
+.badge-purple{background:rgba(168,85,247,0.15);color:var(--purple);}
+.profit-pos{color:var(--green);font-weight:600;}
+.profit-neg{color:var(--red);font-weight:600;}
+.troca-box{background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.3);border-radius:10px;padding:1.25rem;margin-top:1rem;}
+.troca-box-title{font-size:0.88rem;font-weight:600;color:var(--purple);margin-bottom:0.75rem;}
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;}
+.toggle-row label{font-size:0.85rem;color:var(--muted);cursor:pointer;}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--purple);cursor:pointer;}
+.preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-top:1rem;}
+.preview-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed rgba(255,255,255,0.06);font-size:0.85rem;}
+.preview-row:last-child{border-bottom:none;font-weight:700;font-size:1rem;padding-top:10px;}
+.estoque-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem;margin-top:1.5rem;}
+.car-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--card-shadow);transition:transform 0.2s,border-color 0.2s;}
+.car-card:hover{transform:translateY(-3px);border-color:var(--accent);}
+.car-card-top{background:var(--surface2);padding:1.25rem;display:flex;align-items:center;justify-content:center;font-size:3rem;border-bottom:1px solid var(--border);}
+.car-card-body{padding:1rem 1.25rem;}
+.car-card-name{font-weight:600;font-size:1rem;margin-bottom:4px;}
+.car-card-meta{font-size:0.8rem;color:var(--muted);margin-bottom:3px;}
+.car-card-price{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.4rem;color:var(--accent);margin-bottom:6px;}
+.car-card-footer{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1.25rem;border-top:1px solid var(--border);gap:6px;flex-wrap:wrap;}
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
+.chart-bar-item{margin-bottom:10px;}
+.chart-bar-label{display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;color:var(--muted);}
+.chart-bar-label span:last-child{color:var(--text);font-weight:500;}
+.chart-bar-bg{background:var(--surface2);border-radius:4px;height:8px;overflow:hidden;}
+.chart-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.6s ease;}
+.chart-bar-fill.green{background:var(--green);}
+.chart-bar-fill.purple{background:var(--purple);}
+.empty-state{text-align:center;padding:3rem;color:var(--muted);}
+.empty-state .icon{font-size:3rem;margin-bottom:1rem;opacity:0.4;}
+.gasto-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface2);border-radius:8px;margin-bottom:6px;}
+.gasto-item-left{flex:1;}
+.gasto-item-desc{font-size:0.88rem;font-weight:500;}
+.gasto-item-meta{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+.gasto-item-val{color:var(--red);font-weight:700;font-size:0.9rem;white-space:nowrap;}
+.gastos-total-row{display:flex;justify-content:space-between;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 14px;font-size:0.9rem;margin-top:8px;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;width:100%;max-width:580px;box-shadow:0 20px 60px rgba(0,0,0,0.6);margin:auto;}
+.modal-lg{max-width:700px;}
+.modal-title{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--accent);margin-bottom:1.25rem;}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:1.25rem;flex-wrap:wrap;}
+.info-bar{background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:0.85rem;margin-bottom:1rem;}
+.warn-box{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px 14px;font-size:0.84rem;color:var(--red);margin-bottom:1rem;}
+/* ACERTOS */
+.socio-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.socio-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:var(--card-shadow);}
+.socio-card.antonio{border-top:3px solid var(--blue);}
+.socio-card.joao{border-top:3px solid var(--accent);}
+.socio-header{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;}
+.socio-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;font-family:'Impact','Arial Narrow',sans-serif;letter-spacing:1px;}
+.socio-avatar.antonio{background:rgba(59,130,246,0.2);color:var(--blue);}
+.socio-avatar.joao{background:rgba(232,160,32,0.2);color:var(--accent);}
+.socio-name{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.4rem;letter-spacing:2px;}
+.socio-name.antonio{color:var(--blue);}
+.socio-name.joao{color:var(--accent);}
+.socio-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.06);font-size:0.88rem;}
+.socio-row:last-child{border-bottom:none;}
+.socio-row-label{color:var(--muted);}
+.socio-row-val{font-weight:600;}
+.saldo-box{border-radius:10px;padding:1rem 1.25rem;text-align:center;margin-top:1rem;}
+.saldo-box.receber{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);}
+.saldo-box.pagar{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);}
+.saldo-box.zerado{background:rgba(107,114,128,0.1);border:1px solid rgba(107,114,128,0.3);}
+.saldo-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.saldo-value{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.8rem;letter-spacing:1px;}
+.veredicto-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:2rem;box-shadow:var(--card-shadow);text-align:center;}
+.veredicto-icon{font-size:3rem;margin-bottom:0.5rem;}
+.veredicto-text{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.5rem;letter-spacing:2px;margin-bottom:0.5rem;}
+.veredicto-sub{font-size:0.9rem;color:var(--muted);}
+.acerto-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--surface2);border-radius:10px;margin-bottom:8px;border-left:3px solid transparent;}
+.acerto-item.antonio{border-left-color:var(--blue);}
+.acerto-item.joao{border-left-color:var(--accent);}
+.acerto-item.neutro{border-left-color:var(--border);}
+.acerto-item-icon{font-size:1.3rem;margin-top:1px;}
+.acerto-item-body{flex:1;}
+.acerto-item-title{font-size:0.9rem;font-weight:600;margin-bottom:2px;}
+.acerto-item-meta{font-size:0.78rem;color:var(--muted);}
+.acerto-item-val{font-weight:700;font-size:0.95rem;white-space:nowrap;margin-top:2px;}
+.acerto-pendente-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:600;background:rgba(232,160,32,0.15);color:var(--accent);margin-left:6px;}
+.acerto-pago-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:600;background:rgba(34,197,94,0.15);color:var(--green);margin-left:6px;}
+/* TOAST */
+#toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+.toast-msg{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:0.9rem;font-weight:500;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,0.5);opacity:0;transform:translateY(16px);transition:all 0.3s ease;max-width:320px;text-align:center;}
+.toast-msg.show{opacity:1;transform:translateY(0);}
+.toast-msg.ok{border-color:var(--green);color:var(--green);}
+.toast-msg.err{border-color:var(--red);color:var(--red);}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+@media(max-width:700px){.report-grid{grid-template-columns:1fr;}.form-grid{grid-template-columns:1fr;}main{padding:1rem;}.socio-grid{grid-template-columns:1fr;}}
+
+
+.login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.login-logo{text-align:center;margin-bottom:1.5rem;}
+.login-logo img{width:100px;height:100px;object-fit:contain;border-radius:16px;}
+.login-title{font-family:'Impact','Arial Narrow',sans-serif;font-size:1.8rem;letter-spacing:3px;text-align:center;margin-bottom:0.25rem;}
+.login-title span{color:var(--accent);}
+.login-sub{text-align:center;color:var(--muted);font-size:0.85rem;margin-bottom:2rem;}
+.login-group{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;}
+.login-group label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;font-weight:500;}
+.login-group select,.login-group input{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:1rem;outline:none;width:100%;}
+.login-group select:focus,.login-group input:focus{border-color:var(--accent);}
+.login-btn{width:100%;padding:14px;background:var(--accent);color:#000;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:0.5rem;}
+.login-btn:active{opacity:0.85;}
+.login-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:10px 14px;color:var(--red);font-size:0.85rem;text-align:center;margin-top:0.75rem;display:none;}
+.sync-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:6px 1rem;display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;color:var(--muted);}
+.sync-status{display:flex;align-items:center;gap:6px;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+.sync-dot.syncing{background:var(--accent);animation:pulse 1s infinite;}
+.sync-dot.err{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div style="font-size:4rem">🚗</div>
+    </div>
+    <div class="login-title">CAMARGO <span>VEICULOS</span></div>
+    <div class="login-sub">Sistema de Gestao Financeira</div>
+    <div class="login-group">
+      <label>Usuario</label>
+      <select id="login-usuario">
+        <option value="antonio">Antonio</option>
+        <option value="joao">Joao</option>
+      </select>
+    </div>
+    <div class="login-group">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')fazerLogin()">
+    </div>
+    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+
+<div class="sync-bar" id="sync-bar" style="display:none">
+  <div class="sync-status">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-text">Sincronizado</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span id="sync-usuario" style="color:var(--accent);font-weight:600"></span>
+    <button onclick="fazerLogout()" style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 10px;color:var(--muted);font-size:0.78rem;cursor:pointer;">Sair</button>
+  </div>
+</div>
+
+
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🚗</div>
+    <div class="logo-text">CAMARGO <span>VEÍCULOS</span></div>
+  </div>
+  <div class="header-date" id="headerDate"></div>
+</header>
+
+<nav>
+  <div class="nav-tab active" onclick="showTab('dashboard',this)">📊 Dashboard</div>
+  <div class="nav-tab" onclick="showTab('compras',this)">🛒 Compras</div>
+  <div class="nav-tab" onclick="showTab('vendas',this)">💰 Vendas</div>
+  <div class="nav-tab" onclick="showTab('gastos',this)">🔧 Gastos</div>
+  <div class="nav-tab" onclick="showTab('estoque',this)">🚗 Estoque</div>
+  <div class="nav-tab" onclick="showTab('relatorio',this)">📈 Relatório</div>
+  <div class="nav-tab" onclick="showTab('acertos',this)">🤝 Acertos</div>
+</nav>
+
+<main>
+
+<!-- DASHBOARD -->
+<div class="section active" id="sec-dashboard">
+  <div class="kpi-grid">
+    <div class="kpi-card gold"><div class="kpi-label">Lucro Líquido</div><div class="kpi-value" id="kpi-lucro">R$ 0</div><div class="kpi-sub" id="kpi-lucro-sub">0 veículos vendidos</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Entradas</div><div class="kpi-value" id="kpi-entradas">R$ 0</div><div class="kpi-sub" id="kpi-entradas-sub">0 vendas</div></div>
+    <div class="kpi-card red"><div class="kpi-label">Saídas (Compras)</div><div class="kpi-value" id="kpi-saidas">R$ 0</div><div class="kpi-sub" id="kpi-saidas-sub">0 compras</div></div>
+    <div class="kpi-card purple"><div class="kpi-label">Gastos Adicionais</div><div class="kpi-value" id="kpi-gastos-dash">R$ 0</div><div class="kpi-sub">manutenção, docs, etc.</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Em Estoque</div><div class="kpi-value" id="kpi-estoque">0</div><div class="kpi-sub" id="kpi-estoque-sub">investido: R$ 0</div></div>
+  </div>
+  <div class="table-card">
+    <div class="table-header"><div class="table-title">⚡ Últimas Movimentações</div></div>
+    <div id="tabela-movimentacoes"><div class="empty-state"><div class="icon">📋</div>Nenhuma movimentação.</div></div>
+  </div>
+</div>
+
+<!-- COMPRAS -->
+<div class="section" id="sec-compras">
+  <div class="form-card">
+    <div class="form-title">🛒 Registrar Compra de Veículo</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Marca</label><input type="text" id="c-marca" placeholder="Ex: Toyota"></div>
+      <div class="form-group"><label>Modelo</label><input type="text" id="c-modelo" placeholder="Ex: Corolla"></div>
+      <div class="form-group"><label>Ano</label><input type="number" id="c-ano" placeholder="Ex: 2022"></div>
+      <div class="form-group"><label>Cor</label><input type="text" id="c-cor" placeholder="Ex: Prata"></div>
+      <div class="form-group"><label>Placa</label><input type="text" id="c-placa" placeholder="Ex: ABC-1234" style="text-transform:uppercase"></div>
+      <div class="form-group"><label>Quilometragem</label><input type="number" id="c-km" placeholder="Ex: 45000" min="0"></div>
+      <div class="form-group"><label>Valor Pago (R$)</label><input type="number" id="c-valor" placeholder="Ex: 48000" min="0" step="0.01"></div>
+      <div class="form-group"><label>Data da Compra</label><input type="date" id="c-data"></div>
+      <div class="form-group"><label>Vendedor / Origem</label><input type="text" id="c-vendedor" placeholder="Ex: José Silva"></div>
+      <div class="form-group"><label>Custo de Preparação (R$)</label><input type="number" id="c-custo" placeholder="Ex: 1500" min="0" step="0.01" value="0"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Observações</label>
+      <textarea id="c-obs" rows="2" placeholder="Revisão, IPVA pago, etc..."></textarea>
+    </div>
+    <div class="troca-box">
+      <div class="troca-box-title">🔄 Este veículo entrou como troca de uma venda?</div>
+      <div class="toggle-row">
+        <input type="checkbox" id="c-is-troca" onchange="document.getElementById('c-troca-campos').style.display=this.checked?'block':'none'">
+        <label for="c-is-troca">Sim, foi recebido como parte de uma troca</label>
+      </div>
+      <div id="c-troca-campos" style="display:none">
+        <div class="form-grid">
+          <div class="form-group"><label>Valor Atribuído na Troca (R$)</label><input type="number" id="c-valor-troca" placeholder="Ex: 20000" min="0" step="0.01"></div>
+          <div class="form-group"><label>Referência (veículo vendido)</label><input type="text" id="c-ref-venda" placeholder="Ex: Civic 2020 vendido p/ João"></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.25rem">
+      <button class="btn btn-primary" onclick="registrarCompra()">➕ Registrar Compra</button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">📋 Histórico de Compras</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <input type="text" class="search-input" placeholder="🔍 Buscar..." oninput="filtrarTabelaCompras(this.value)">
+        <div id="filtro-bar-compras" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Veículo</th><th>Placa</th><th>Ano</th><th>Km</th><th>Valor Pago</th><th>Prep.</th><th>Gastos</th><th>Custo Real</th><th>Origem</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="tbody-compras"><tr><td colspan="12"><div class="empty-state"><div class="icon">🛒</div>Nenhuma compra.</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- VENDAS -->
+<div class="section" id="sec-vendas">
+  <div class="form-card">
+    <div class="form-title">💰 Registrar Venda de Veículo</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Veículo (Estoque)</label><select id="v-carro" onchange="updatePreviewVenda()"><option value="">Selecione...</option></select></div>
+      <div class="form-group"><label>Valor em Dinheiro (R$)</label><input type="number" id="v-valor" placeholder="Ex: 58000" min="0" step="0.01" oninput="updatePreviewVenda()"></div>
+      <div class="form-group"><label>Data da Venda</label><input type="date" id="v-data"></div>
+      <div class="form-group"><label>Comprador</label><input type="text" id="v-comprador" placeholder="Ex: Maria Souza"></div>
+      <div class="form-group"><label>Forma de Pagamento</label>
+        <select id="v-pagamento">
+          <option>Dinheiro</option><option>Financiamento</option><option>PIX</option>
+          <option>Cartão</option><option>Transferência</option><option>Troca + Complemento</option><option>Troca Total</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Comissão (R$)</label><input type="number" id="v-comissao" value="0" min="0" step="0.01" oninput="updatePreviewVenda()"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Observações</label><textarea id="v-obs" rows="2" placeholder="Notas sobre a venda..."></textarea>
+    </div>
+    <div class="troca-box">
+      <div class="troca-box-title">🔄 O comprador entregou um carro como parte do pagamento?</div>
+      <div class="toggle-row">
+        <input type="checkbox" id="v-tem-troca" onchange="toggleTrocaVenda()">
+        <label for="v-tem-troca">Sim, houve troca de veículo</label>
+      </div>
+      <div id="v-troca-campos" style="display:none">
+        <div style="background:rgba(168,85,247,0.06);border-radius:8px;padding:8px 12px;font-size:0.82rem;color:var(--purple);margin-bottom:12px">
+          💡 O veículo recebido na troca será automaticamente adicionado ao estoque.
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label>Marca do Carro Recebido</label><input type="text" id="vt-marca" placeholder="Ex: Honda"></div>
+          <div class="form-group"><label>Modelo</label><input type="text" id="vt-modelo" placeholder="Ex: Civic"></div>
+          <div class="form-group"><label>Ano</label><input type="number" id="vt-ano" placeholder="2019"></div>
+          <div class="form-group"><label>Placa</label><input type="text" id="vt-placa" placeholder="XYZ-9999" style="text-transform:uppercase"></div>
+          <div class="form-group"><label>Km</label><input type="number" id="vt-km" placeholder="60000" min="0"></div>
+          <div class="form-group"><label>Valor Avaliado na Troca (R$)</label><input type="number" id="vt-valor" placeholder="Ex: 25000" min="0" step="0.01" oninput="updatePreviewVenda()"></div>
+        </div>
+      </div>
+    </div>
+    <div id="preview-lucro-venda" style="display:none"></div>
+    <div style="margin-top:1.25rem">
+      <button class="btn btn-primary" onclick="registrarVenda()">✅ Registrar Venda</button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">📋 Histórico de Vendas</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <input type="text" class="search-input" placeholder="🔍 Buscar..." oninput="filtrarTabelaVendas(this.value)">
+        <div id="filtro-bar-vendas" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Veículo Vendido</th><th>Comprador</th><th>Custo Compra</th><th>Gastos</th><th>Vlr Dinheiro</th><th>Troca</th><th>Comissão</th><th>Lucro</th><th>Data</th><th>Pagamento</th><th>Ações</th></tr></thead>
+        <tbody id="tbody-vendas"><tr><td colspan="11"><div class="empty-state"><div class="icon">💰</div>Nenhuma venda.</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- GASTOS -->
+<div class="section" id="sec-gastos">
+  <div class="form-card">
+    <div class="form-title">🔧 Registrar Gasto em Veículo</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Veículo</label><select id="g-carro"><option value="">Selecione o veículo...</option></select></div>
+      <div class="form-group"><label>Categoria</label>
+        <select id="g-categoria">
+          <option>Mecânica / Revisão</option><option>Funilaria / Pintura</option><option>Elétrica</option>
+          <option>Pneus / Rodas</option><option>Documentação / DETRAN</option><option>IPVA / Licenciamento</option>
+          <option>Limpeza / Estética</option><option>Peças</option><option>Frete / Transporte</option><option>Outros</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Descrição</label><input type="text" id="g-desc" placeholder="Ex: Troca de óleo e filtros"></div>
+      <div class="form-group"><label>Valor (R$)</label><input type="number" id="g-valor" placeholder="Ex: 350" min="0" step="0.01"></div>
+      <div class="form-group"><label>Data</label><input type="date" id="g-data"></div>
+      <div class="form-group"><label>Fornecedor / Oficina</label><input type="text" id="g-fornecedor" placeholder="Ex: Auto Center Silva"></div>
+    </div>
+    <button class="btn btn-primary" onclick="registrarGasto()">➕ Registrar Gasto</button>
+  </div>
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">🔧 Todos os Gastos</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <select id="filtro-gastos-car" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.85rem;outline:none;" onchange="renderGastos()">
+          <option value="">Todos os veículos</option>
+        </select>
+        <div id="filtro-bar-gastos" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Veículo</th><th>Categoria</th><th>Descrição</th><th>Valor</th><th>Data</th><th>Fornecedor</th><th>Ações</th></tr></thead>
+        <tbody id="tbody-gastos"><tr><td colspan="7"><div class="empty-state"><div class="icon">🔧</div>Nenhum gasto.</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ESTOQUE -->
+<div class="section" id="sec-estoque">
+  <div class="kpi-grid" style="margin-bottom:1.5rem">
+    <div class="kpi-card blue"><div class="kpi-label">Veículos em Estoque</div><div class="kpi-value" id="est-qtd" style="color:var(--blue)">0</div></div>
+    <div class="kpi-card red"><div class="kpi-label">Capital Investido</div><div class="kpi-value" id="est-capital" style="color:var(--red)">R$ 0</div></div>
+    <div class="kpi-card purple"><div class="kpi-label">Gastos no Estoque</div><div class="kpi-value" id="est-gastos" style="color:var(--purple)">R$ 0</div></div>
+    <div class="kpi-card red"><div class="kpi-label">Custo Real Total</div><div class="kpi-value" id="est-custo-real" style="color:var(--red)">R$ 0</div><div class="kpi-sub">compra + todos os gastos</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:1rem">
+    <h2 style="font-family:'Impact','Arial Narrow',sans-serif;letter-spacing:2px;font-size:1.4rem;color:var(--accent)">🚗 VEÍCULOS DISPONÍVEIS</h2>
+    <input type="text" class="search-input" placeholder="🔍 Buscar no estoque..." oninput="filtrarEstoque(this.value)">
+  </div>
+  <div class="estoque-grid" id="estoque-grid">
+    <div class="empty-state" style="grid-column:1/-1"><div class="icon">🚗</div>Nenhum veículo em estoque.</div>
+  </div>
+</div>
+
+<!-- RELATÓRIO -->
+<div class="section" id="sec-relatorio">
+  <div class="kpi-grid">
+    <div class="kpi-card gold"><div class="kpi-label">Lucro Líquido Total</div><div class="kpi-value" id="r-lucro">R$ 0</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Ticket Médio Venda</div><div class="kpi-value" id="r-ticket">R$ 0</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Margem Média</div><div class="kpi-value" id="r-margem">0%</div></div>
+    <div class="kpi-card purple"><div class="kpi-label">Total Gastos Adicionais</div><div class="kpi-value" id="r-gastos-total">R$ 0</div></div>
+    <div class="kpi-card red"><div class="kpi-label">Custo Médio Real/Carro</div><div class="kpi-value" id="r-custo-medio">R$ 0</div></div>
+  </div>
+  <div class="report-grid">
+    <div class="form-card" style="margin-bottom:0"><div class="form-title">📦 Veículos Mais Lucrativos</div><div id="chart-lucro" style="margin-top:1rem"></div></div>
+    <div class="form-card" style="margin-bottom:0"><div class="form-title">🔧 Gastos por Categoria</div><div id="chart-gastos-cat" style="margin-top:1rem"></div></div>
+  </div>
+  <div class="form-card" style="margin-bottom:1.5rem"><div class="form-title">🏷️ Marcas Mais Compradas</div><div id="chart-marcas" style="margin-top:1rem"></div></div>
+  <div class="table-card">
+    <div class="table-header"><div class="table-title">📊 Resumo por Veículo Vendido</div></div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Veículo</th><th>Custo Compra</th><th>Gastos</th><th>Troca Recebida</th><th>Valor Dinheiro</th><th>Receita Total</th><th>Comissão</th><th>Lucro</th><th>Margem</th></tr></thead>
+        <tbody id="tbody-relatorio"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ACERTOS -->
+<div class="section" id="sec-acertos">
+
+  <!-- Veredicto geral -->
+  <div class="veredicto-card" id="veredicto-card">
+    <div class="veredicto-icon">🤝</div>
+    <div class="veredicto-text" id="veredicto-text">Calculando acerto...</div>
+    <div class="veredicto-sub" id="veredicto-sub"></div>
+  </div>
+
+  <!-- Cards dos sócios -->
+  <div class="socio-grid">
+    <!-- ANTÔNIO -->
+    <div class="socio-card antonio">
+      <div class="socio-header">
+        <div class="socio-avatar antonio">A</div>
+        <div class="socio-name antonio">ANTÔNIO</div>
+      </div>
+      <div class="socio-row"><span class="socio-row-label">Total registrado devendo Antônio</span><span class="socio-row-val profit-neg" id="a-lucro-share">R$ 0</span></div>
+      <div class="socio-row"><span class="socio-row-label">Já quitado</span><span class="socio-row-val profit-pos" id="a-deve-gastos">R$ 0</span></div>
+      <div class="socio-row"><span class="socio-row-label">Pendente (a receber)</span><span class="socio-row-val" id="a-repasses">R$ 0</span></div>
+      <div class="socio-row" style="display:none"><span id="a-quitados"></span></div>
+      <div class="saldo-box" id="a-saldo-box">
+        <div class="saldo-label" id="a-saldo-label">Saldo</div>
+        <div class="saldo-value" id="a-saldo-val">R$ 0</div>
+      </div>
+    </div>
+
+    <!-- JOÃO -->
+    <div class="socio-card joao">
+      <div class="socio-header">
+        <div class="socio-avatar joao">J</div>
+        <div class="socio-name joao">JOÃO</div>
+      </div>
+      <div class="socio-row"><span class="socio-row-label">Total registrado devendo João</span><span class="socio-row-val profit-neg" id="j-lucro-share">R$ 0</span></div>
+      <div class="socio-row"><span class="socio-row-label">Já quitado</span><span class="socio-row-val profit-pos" id="j-gastos-pagos">R$ 0</span></div>
+      <div class="socio-row"><span class="socio-row-label">Pendente (a receber)</span><span class="socio-row-val" id="j-repasses">R$ 0</span></div>
+      <div class="socio-row" style="display:none"><span id="j-quitados"></span></div>
+      <div class="saldo-box" id="j-saldo-box">
+        <div class="saldo-label" id="j-saldo-label">Saldo</div>
+        <div class="saldo-value" id="j-saldo-val">R$ 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registrar movimentação de acerto -->
+  <div class="form-card">
+    <div class="form-title">➕ Registrar Movimentação de Acerto</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:1.25rem">Use aqui para registrar: gastos pagos por João, repasses feitos, acertos pagos entre vocês, etc.</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="ac-tipo" onchange="onTipoAcertoChange()">
+          <option value="joao_deve_antonio">💸 João Devendo Antônio</option>
+          <option value="antonio_deve_joao">💸 Antônio Devendo João</option>
+        </select>
+      </div>
+      <div class="form-group" id="ac-carro-group">
+        <label>Veículo (opcional)</label>
+        <select id="ac-carro"><option value="">Nenhum / geral</option></select>
+      </div>
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input type="number" id="ac-valor" placeholder="Ex: 1200" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="ac-data">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:1.25rem">
+      <label>Descrição / Observação</label>
+      <input type="text" id="ac-desc" placeholder="Ex: Pintura Corolla, repasse de venda do Civic, acerto maio...">
+    </div>
+    <button class="btn btn-primary" onclick="registrarAcerto()">➕ Registrar</button>
+  </div>
+
+  <!-- Histórico de movimentações de acerto -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">📋 Histórico de Acertos</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <select id="filtro-ac-status" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.85rem;outline:none;" onchange="renderAcertos()">
+          <option value="">Todos</option>
+          <option value="pendente">Pendentes</option>
+          <option value="quitado">Quitados</option>
+        </select>
+        <div id="filtro-bar-acertos" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Tipo</th><th>Descrição</th><th>Veículo</th><th>Valor</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="tbody-acertos"><tr><td colspan="7"><div class="empty-state"><div class="icon">🤝</div>Nenhuma movimentação de acerto.</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ===== MODAL VENDER DO ESTOQUE ===== -->
+<div class="modal-overlay" id="modal-vender">
+  <div class="modal">
+    <div class="modal-title">💰 Registrar Venda</div>
+    <input type="hidden" id="modal-car-id">
+    <div class="info-bar" id="modal-car-info"></div>
+    <div class="form-grid">
+      <div class="form-group"><label>Valor em Dinheiro (R$)</label><input type="number" id="modal-valor" placeholder="Ex: 58000" min="0" step="0.01" oninput="updateModalPreview()"></div>
+      <div class="form-group"><label>Comprador</label><input type="text" id="modal-comprador" placeholder="Nome do comprador"></div>
+      <div class="form-group"><label>Data da Venda</label><input type="date" id="modal-data"></div>
+      <div class="form-group"><label>Pagamento</label>
+        <select id="modal-pagamento"><option>Dinheiro</option><option>Financiamento</option><option>PIX</option><option>Cartão</option><option>Transferência</option><option>Troca + Complemento</option><option>Troca Total</option></select>
+      </div>
+      <div class="form-group"><label>Comissão (R$)</label><input type="number" id="modal-comissao" value="0" min="0" step="0.01" oninput="updateModalPreview()"></div>
+    </div>
+    <div class="troca-box" style="margin-bottom:1rem">
+      <div class="troca-box-title">🔄 Houve troca de veículo?</div>
+      <div class="toggle-row">
+        <input type="checkbox" id="modal-tem-troca" onchange="toggleModalTroca()">
+        <label for="modal-tem-troca">Sim, o comprador entregou um carro</label>
+      </div>
+      <div id="modal-troca-campos" style="display:none">
+        <div class="form-grid">
+          <div class="form-group"><label>Marca</label><input type="text" id="mt-marca" placeholder="Ex: Honda"></div>
+          <div class="form-group"><label>Modelo</label><input type="text" id="mt-modelo" placeholder="Ex: Fit"></div>
+          <div class="form-group"><label>Ano</label><input type="number" id="mt-ano" placeholder="2018"></div>
+          <div class="form-group"><label>Placa</label><input type="text" id="mt-placa" placeholder="ABC-1234" style="text-transform:uppercase"></div>
+          <div class="form-group"><label>Km</label><input type="number" id="mt-km" placeholder="80000" min="0"></div>
+          <div class="form-group"><label>Valor na Troca (R$)</label><input type="number" id="mt-valor" placeholder="Ex: 18000" min="0" step="0.01" oninput="updateModalPreview()"></div>
+        </div>
+      </div>
+    </div>
+    <div id="modal-preview" class="preview-box" style="display:none"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-vender')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarVendaModal()">✅ Confirmar Venda</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL GASTOS VIEW ===== -->
+<div class="modal-overlay" id="modal-gastos-view">
+  <div class="modal modal-lg">
+    <div class="modal-title">🔧 Gastos do Veículo</div>
+    <div class="info-bar" id="modal-gastos-car-info"></div>
+    <div id="modal-gastos-lista"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-gastos-view')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL EDITAR COMPRA ===== -->
+<div class="modal-overlay" id="modal-edit-compra">
+  <div class="modal modal-lg">
+    <div class="modal-title">✏️ Editar Dados do Veículo</div>
+    <input type="hidden" id="edit-compra-id">
+    <div class="form-grid">
+      <div class="form-group"><label>Marca</label><input type="text" id="edit-c-marca"></div>
+      <div class="form-group"><label>Modelo</label><input type="text" id="edit-c-modelo"></div>
+      <div class="form-group"><label>Ano</label><input type="number" id="edit-c-ano"></div>
+      <div class="form-group"><label>Cor</label><input type="text" id="edit-c-cor"></div>
+      <div class="form-group"><label>Placa</label><input type="text" id="edit-c-placa" style="text-transform:uppercase"></div>
+      <div class="form-group"><label>Quilometragem</label><input type="number" id="edit-c-km" min="0"></div>
+      <div class="form-group"><label>Valor Pago (R$)</label><input type="number" id="edit-c-valor" min="0" step="0.01"></div>
+      <div class="form-group"><label>Custo de Preparação (R$)</label><input type="number" id="edit-c-custo" min="0" step="0.01"></div>
+      <div class="form-group"><label>Data da Compra</label><input type="date" id="edit-c-data"></div>
+      <div class="form-group"><label>Vendedor / Origem</label><input type="text" id="edit-c-vendedor"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Observações</label><textarea id="edit-c-obs" rows="2"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-edit-compra')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEdicaoCompra()">💾 Salvar Alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL EDITAR VENDA ===== -->
+<div class="modal-overlay" id="modal-edit-venda">
+  <div class="modal modal-lg">
+    <div class="modal-title">✏️ Editar Dados da Venda</div>
+    <input type="hidden" id="edit-venda-idx">
+    <div class="info-bar" id="edit-venda-car-info"></div>
+    <div class="form-grid">
+      <div class="form-group"><label>Valor em Dinheiro (R$)</label><input type="number" id="edit-v-valor" min="0" step="0.01" oninput="updateEditVendaPreview()"></div>
+      <div class="form-group"><label>Valor da Troca (R$)</label><input type="number" id="edit-v-troca" min="0" step="0.01" value="0" oninput="updateEditVendaPreview()"></div>
+      <div class="form-group"><label>Comissão (R$)</label><input type="number" id="edit-v-comissao" min="0" step="0.01" value="0" oninput="updateEditVendaPreview()"></div>
+      <div class="form-group"><label>Data da Venda</label><input type="date" id="edit-v-data"></div>
+      <div class="form-group"><label>Comprador</label><input type="text" id="edit-v-comprador"></div>
+      <div class="form-group"><label>Forma de Pagamento</label>
+        <select id="edit-v-pagamento">
+          <option>Dinheiro</option><option>Financiamento</option><option>PIX</option><option>Cartão</option><option>Transferência</option><option>Troca + Complemento</option><option>Troca Total</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem"><label>Observações</label><textarea id="edit-v-obs" rows="2"></textarea></div>
+    <div id="edit-venda-preview" class="preview-box" style="display:none;margin-bottom:0"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-edit-venda')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEdicaoVenda()">💾 Salvar Alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL CONFIRMAR EXCLUSÃO DE VENDA ===== -->
+<div class="modal-overlay" id="modal-del-venda">
+  <div class="modal">
+    <div class="modal-title">🗑️ Desfazer Venda</div>
+    <input type="hidden" id="del-venda-idx">
+    <div class="warn-box">
+      ⚠️ <b>Atenção:</b> Ao desfazer esta venda, o veículo voltará ao estoque automaticamente. Se havia um carro na troca que foi adicionado ao estoque, ele também será removido (caso não tenha sido vendido).
+    </div>
+    <div class="info-bar" id="del-venda-info"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-del-venda')">Cancelar</button>
+      <button class="btn btn-danger" style="padding:10px 20px" onclick="confirmarExclusaoVenda()">🗑️ Confirmar — Desfazer Venda</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL CONFIRMAR EXCLUSÃO DE COMPRA ===== -->
+<div class="modal-overlay" id="modal-del-compra">
+  <div class="modal">
+    <div class="modal-title">🗑️ Excluir Compra</div>
+    <input type="hidden" id="del-compra-id">
+    <div class="warn-box">
+      ⚠️ <b>Atenção:</b> Esta ação irá remover o veículo do sistema, incluindo todos os gastos vinculados. Esta ação não pode ser desfeita.
+    </div>
+    <div class="info-bar" id="del-compra-info"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-del-compra')">Cancelar</button>
+      <button class="btn btn-danger" style="padding:10px 20px" onclick="confirmarExclusaoCompra()">🗑️ Confirmar Exclusão</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let _storage = {};
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return _storage[k]||null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _storage[k]=v; } }
+
+let D = JSON.parse(lsGet('cv4') || '{"compras":[],"vendas":[],"gastos":[],"acertos":[]}');
+let NID = parseInt(lsGet('cv4_id') || '1');
+
+// Garante que todos os arrays existem (proteção contra dados antigos)
+if(!D.compras) D.compras=[];
+if(!D.vendas)  D.vendas=[];
+if(!D.gastos)  D.gastos=[];
+if(!D.acertos) D.acertos=[];
+
+// Migração de dados de versão anterior
+(function migrar(){
+  const old = lsGet('cv3');
+  if(old && !lsGet('cv4')){
+    try{
+      D = JSON.parse(old);
+      if(!D.compras) D.compras=[];
+      if(!D.vendas)  D.vendas=[];
+      if(!D.gastos)  D.gastos=[];
+      if(!D.acertos) D.acertos=[];
+      lsSet('cv4', JSON.stringify(D));
+    }catch(e){}
+  }
+})();
+
+function save(){ lsSet('cv4', JSON.stringify(D)); lsSet('cv4_id', NID); }
+
+// ===== TOAST (substitui alert/confirm no iOS Safari) =====
+function toast(msg, tipo){
+  const c=document.getElementById('toast-container');
+  const el=document.createElement('div');
+  el.className='toast-msg '+(tipo==='err'?'err':'ok');
+  el.textContent=msg;
+  c.appendChild(el);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ el.classList.add('show'); }); });
+  setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(), 350); }, 3000);
+}
+
+// ===== FORMATAÇÃO =====
+const fmt = v => 'R$ ' + Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+const fmtF = v => 'R$ ' + Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtKm = v => Number(v||0).toLocaleString('pt-BR') + ' km';
+const fmtDate = s => { if(!s) return '—'; const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; };
+const today = () => new Date().toISOString().split('T')[0];
+
+// ===== HELPERS =====
+const getEstoque = () => { const v=new Set(D.vendas.map(x=>x.carId)); return D.compras.filter(c=>!v.has(c.id)); };
+const getGastos = id => D.gastos.filter(g=>g.carId===id);
+const totalGastos = id => getGastos(id).reduce((s,g)=>s+g.valor,0);
+const custoReal = c => c.custoTotal + totalGastos(c.id);
+
+// ===== TABS =====
+function showTab(tab, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  if(el) el.classList.add('active');
+  ({
+    dashboard: renderDashboard,
+    compras: renderCompras,
+    vendas: ()=>{ populateSelect('v-carro','estoque'); renderVendas(); },
+    gastos: ()=>{ populateSelect('g-carro','todos'); populateSelect('filtro-gastos-car','todos'); renderGastos(); },
+    estoque: renderEstoque,
+    relatorio: renderRelatorio,
+    acertos: ()=>{ populateAcertoCarro(); renderAcertos(); renderVeredicto(); }
+  })[tab]?.();
+}
+
+// ===== SELECTS =====
+function populateSelect(id, tipo){
+  const el = document.getElementById(id); if(!el) return;
+  const vendidos = new Set(D.vendas.map(v=>v.carId));
+  const lista = tipo==='estoque' ? D.compras.filter(c=>!vendidos.has(c.id)) : D.compras;
+  const placeholder = id==='filtro-gastos-car' ? 'Todos os veículos' : 'Selecione o veículo...';
+  el.innerHTML = `<option value="">${placeholder}</option>`;
+  lista.forEach(c=>{
+    const status = vendidos.has(c.id)?' [vendido]':' [estoque]';
+    el.innerHTML += `<option value="${c.id}">${c.marca} ${c.modelo} ${c.ano||''}${c.placa?' — '+c.placa:''}${tipo==='todos'?status:''} | custo: ${fmt(custoReal(c))}</option>`;
+  });
+}
+
+// ===== TOGGLES =====
+function toggleTrocaVenda(){
+  document.getElementById('v-troca-campos').style.display = document.getElementById('v-tem-troca').checked ? 'block' : 'none';
+  updatePreviewVenda();
+}
+function toggleModalTroca(){
+  document.getElementById('modal-troca-campos').style.display = document.getElementById('modal-tem-troca').checked ? 'block' : 'none';
+  updateModalPreview();
+}
+
+// ===== PREVIEW =====
+function buildPreview(carId, valorDin, comissao, valorTroca){
+  const car = D.compras.find(c=>c.id===carId); if(!car) return null;
+  const gc = totalGastos(carId), cr = car.custoTotal + gc;
+  const receita = valorDin + valorTroca, lucro = receita - cr - comissao;
+  const margem = receita>0 ? ((lucro/receita)*100).toFixed(1) : 0;
+  return {car,gc,cr,receita,lucro,margem};
+}
+
+function previewHTML(p, valorDin, valorTroca, comissao){
+  if(!p) return '';
+  return `
+    <div class="preview-row"><span style="color:var(--muted)">Custo de compra</span><span style="color:var(--red)">${fmtF(p.car.custoTotal)}</span></div>
+    <div class="preview-row"><span style="color:var(--muted)">Gastos adicionais</span><span style="color:var(--purple)">${fmtF(p.gc)}</span></div>
+    <div class="preview-row"><span style="color:var(--muted)">Custo real total</span><span style="color:var(--red);font-weight:600">${fmtF(p.cr)}</span></div>
+    ${valorTroca>0?`<div class="preview-row"><span style="color:var(--muted)">Troca recebida</span><span style="color:var(--purple)">+ ${fmtF(valorTroca)}</span></div>`:''}
+    <div class="preview-row"><span style="color:var(--muted)">Valor em dinheiro</span><span style="color:var(--green)">+ ${fmtF(valorDin)}</span></div>
+    <div class="preview-row"><span style="color:var(--muted)">Receita total</span><span style="color:var(--green)">${fmtF(p.receita)}</span></div>
+    ${comissao>0?`<div class="preview-row"><span style="color:var(--muted)">Comissão</span><span style="color:var(--red)">− ${fmtF(comissao)}</span></div>`:''}
+    <div class="preview-row"><span>💰 Lucro líquido</span><span style="color:${p.lucro>=0?'var(--green)':'var(--red)'}"><b>${fmtF(p.lucro)} (${p.margem}%)</b></span></div>`;
+}
+
+function updatePreviewVenda(){
+  const carId=parseInt(document.getElementById('v-carro').value)||0;
+  const valorDin=parseFloat(document.getElementById('v-valor').value)||0;
+  const comissao=parseFloat(document.getElementById('v-comissao').value)||0;
+  const temTroca=document.getElementById('v-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('vt-valor').value)||0):0;
+  const prev=document.getElementById('preview-lucro-venda');
+  const p=buildPreview(carId,valorDin,comissao,valorTroca);
+  if(p&&(valorDin>0||valorTroca>0)){prev.style.display='block';prev.innerHTML=`<div class="preview-box">${previewHTML(p,valorDin,valorTroca,comissao)}</div>`;}
+  else prev.style.display='none';
+}
+
+function updateModalPreview(){
+  const carId=parseInt(document.getElementById('modal-car-id').value)||0;
+  const valorDin=parseFloat(document.getElementById('modal-valor').value)||0;
+  const comissao=parseFloat(document.getElementById('modal-comissao').value)||0;
+  const temTroca=document.getElementById('modal-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('mt-valor').value)||0):0;
+  const prev=document.getElementById('modal-preview');
+  const p=buildPreview(carId,valorDin,comissao,valorTroca);
+  if(p){prev.style.display='block';prev.innerHTML=previewHTML(p,valorDin,valorTroca,comissao);}
+  else prev.style.display='none';
+}
+
+function updateEditVendaPreview(){
+  const idx=parseInt(document.getElementById('edit-venda-idx').value);
+  const v=D.vendas[idx]; if(!v) return;
+  const carId=v.carId;
+  const valorDin=parseFloat(document.getElementById('edit-v-valor').value)||0;
+  const valorTroca=parseFloat(document.getElementById('edit-v-troca').value)||0;
+  const comissao=parseFloat(document.getElementById('edit-v-comissao').value)||0;
+  const prev=document.getElementById('edit-venda-preview');
+  const p=buildPreview(carId,valorDin,comissao,valorTroca);
+  if(p){prev.style.display='block';prev.innerHTML=previewHTML(p,valorDin,valorTroca,comissao);}
+  else prev.style.display='none';
+}
+
+// ===== REGISTRAR COMPRA =====
+function registrarCompra(){
+  const marca=document.getElementById('c-marca').value.trim();
+  const modelo=document.getElementById('c-modelo').value.trim();
+  const valor=parseFloat(document.getElementById('c-valor').value)||0;
+  const dataC=document.getElementById('c-data').value;
+  if(!marca||!modelo||!valor||!dataC){toast('Preencha: Marca, Modelo, Valor e Data.','err');return;}
+  const custo=parseFloat(document.getElementById('c-custo').value)||0;
+  const isTroca=document.getElementById('c-is-troca').checked;
+  D.compras.push({
+    id:NID++, marca, modelo,
+    ano:parseInt(document.getElementById('c-ano').value)||0,
+    cor:document.getElementById('c-cor').value.trim(),
+    placa:document.getElementById('c-placa').value.trim().toUpperCase(),
+    km:parseInt(document.getElementById('c-km').value)||0,
+    valor, custoPrep:custo, custoTotal:valor+custo,
+    data:dataC, vendedor:document.getElementById('c-vendedor').value.trim(),
+    obs:document.getElementById('c-obs').value.trim(),
+    origemTroca:isTroca,
+    valorTroca:isTroca?(parseFloat(document.getElementById('c-valor-troca').value)||0):0,
+    refVenda:isTroca?document.getElementById('c-ref-venda').value.trim():''
+  });
+  save();
+  ['c-marca','c-modelo','c-ano','c-cor','c-placa','c-km','c-valor','c-vendedor','c-obs','c-valor-troca','c-ref-venda'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('c-custo').value='0'; document.getElementById('c-is-troca').checked=false;
+  document.getElementById('c-troca-campos').style.display='none'; document.getElementById('c-data').value=today();
+  renderCompras(); renderDashboard(); toast('✅ Compra registrada!');
+}
+
+// ===== EDITAR COMPRA =====
+function abrirEditarCompra(id){
+  const c=D.compras.find(x=>x.id===id); if(!c) return;
+  document.getElementById('edit-compra-id').value=id;
+  document.getElementById('edit-c-marca').value=c.marca||'';
+  document.getElementById('edit-c-modelo').value=c.modelo||'';
+  document.getElementById('edit-c-ano').value=c.ano||'';
+  document.getElementById('edit-c-cor').value=c.cor||'';
+  document.getElementById('edit-c-placa').value=c.placa||'';
+  document.getElementById('edit-c-km').value=c.km||'';
+  document.getElementById('edit-c-valor').value=c.valor||'';
+  document.getElementById('edit-c-custo').value=c.custoPrep||'';
+  document.getElementById('edit-c-data').value=c.data||'';
+  document.getElementById('edit-c-vendedor').value=c.vendedor||'';
+  document.getElementById('edit-c-obs').value=c.obs||'';
+  document.getElementById('modal-edit-compra').classList.add('open');
+}
+
+function salvarEdicaoCompra(){
+  const id=parseInt(document.getElementById('edit-compra-id').value);
+  const idx=D.compras.findIndex(c=>c.id===id); if(idx<0) return;
+  const c=D.compras[idx];
+  const marca=document.getElementById('edit-c-marca').value.trim();
+  const modelo=document.getElementById('edit-c-modelo').value.trim();
+  const valor=parseFloat(document.getElementById('edit-c-valor').value)||0;
+  const custo=parseFloat(document.getElementById('edit-c-custo').value)||0;
+  if(!marca||!modelo){toast('Marca e Modelo são obrigatórios.','err');return;}
+  D.compras[idx]={
+    ...c, marca, modelo,
+    ano:parseInt(document.getElementById('edit-c-ano').value)||c.ano,
+    cor:document.getElementById('edit-c-cor').value.trim(),
+    placa:document.getElementById('edit-c-placa').value.trim().toUpperCase(),
+    km:parseInt(document.getElementById('edit-c-km').value)||0,
+    valor, custoPrep:custo, custoTotal:valor+custo,
+    data:document.getElementById('edit-c-data').value||c.data,
+    vendedor:document.getElementById('edit-c-vendedor').value.trim(),
+    obs:document.getElementById('edit-c-obs').value.trim()
+  };
+  save(); fecharModal('modal-edit-compra');
+  renderCompras(); renderEstoque(); renderDashboard();
+  toast('✅ Dados atualizados com sucesso!');
+}
+
+// ===== EXCLUSÃO DE COMPRA =====
+function abrirExclusaoCompra(id){
+  const c=D.compras.find(x=>x.id===id); if(!c) return;
+  const vendido=D.vendas.some(v=>v.carId===id);
+  if(vendido){toast('Não é possível excluir: há venda vinculada. Desfaça a venda primeiro.','err');return;}
+  document.getElementById('del-compra-id').value=id;
+  document.getElementById('del-compra-info').innerHTML=`<b>${c.marca} ${c.modelo} ${c.ano}</b>${c.placa?' — '+c.placa:''}<br>Valor pago: ${fmtF(c.valor)} | Gastos: ${fmtF(totalGastos(id))}`;
+  document.getElementById('modal-del-compra').classList.add('open');
+}
+
+function confirmarExclusaoCompra(){
+  const id=parseInt(document.getElementById('del-compra-id').value);
+  D.compras=D.compras.filter(c=>c.id!==id);
+  D.gastos=D.gastos.filter(g=>g.carId!==id);
+  save(); fecharModal('modal-del-compra');
+  renderCompras(); renderDashboard(); toast('🗑️ Compra excluída.');
+}
+
+// ===== REGISTRAR VENDA =====
+function registrarVenda(){
+  const carId=parseInt(document.getElementById('v-carro').value)||0;
+  const valorDin=parseFloat(document.getElementById('v-valor').value)||0;
+  const dataV=document.getElementById('v-data').value;
+  const temTroca=document.getElementById('v-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('vt-valor').value)||0):0;
+  if(!carId||!dataV||(valorDin===0&&valorTroca===0)){toast('Preencha veículo, data e valor.','err');return;}
+  const comissao=parseFloat(document.getElementById('v-comissao').value)||0;
+  const car=D.compras.find(c=>c.id===carId);
+  const gc=totalGastos(carId), cr=custoReal(car);
+  const receita=valorDin+valorTroca, lucro=receita-cr-comissao;
+  let trocaCarId=null;
+  if(temTroca&&document.getElementById('vt-marca').value.trim()){
+    trocaCarId=NID++;
+    D.compras.push({
+      id:trocaCarId, marca:document.getElementById('vt-marca').value.trim(),
+      modelo:document.getElementById('vt-modelo').value.trim(),
+      ano:parseInt(document.getElementById('vt-ano').value)||0, cor:'',
+      placa:document.getElementById('vt-placa').value.trim().toUpperCase(),
+      km:parseInt(document.getElementById('vt-km').value)||0,
+      valor:valorTroca, custoPrep:0, custoTotal:valorTroca,
+      data:dataV, vendedor:document.getElementById('v-comprador').value.trim(),
+      obs:`Recebido como troca na venda do ${car.marca} ${car.modelo} ${car.ano}`,
+      origemTroca:true, valorTroca, refVenda:`${car.marca} ${car.modelo} ${car.ano}`
+    });
+  }
+  D.vendas.push({carId,valorDin,valorTroca,receita,data:dataV,comprador:document.getElementById('v-comprador').value.trim(),pagamento:document.getElementById('v-pagamento').value,comissao,obs:document.getElementById('v-obs').value.trim(),lucro,gc,trocaCarId});
+  save();
+  ['v-valor','v-data','v-comprador','v-comissao','v-obs','vt-marca','vt-modelo','vt-ano','vt-placa','vt-km','vt-valor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('v-carro').value=''; document.getElementById('v-comissao').value='0';
+  document.getElementById('v-tem-troca').checked=false; document.getElementById('v-troca-campos').style.display='none';
+  document.getElementById('preview-lucro-venda').style.display='none'; document.getElementById('v-data').value=today();
+  renderVendas(); renderDashboard();
+  toast(trocaCarId?`✅ Venda registrada! Lucro: ${fmtF(lucro)} — 🔄 Troca adicionada ao estoque!`:`✅ Venda registrada! Lucro: ${fmtF(lucro)}`);
+}
+
+// ===== EDITAR VENDA =====
+function abrirEditarVenda(idx){
+  const v=D.vendas[idx]; if(!v) return;
+  const car=D.compras.find(c=>c.id===v.carId);
+  document.getElementById('edit-venda-idx').value=idx;
+  document.getElementById('edit-venda-car-info').innerHTML=`Veículo: <b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b> | Custo real: <b>${fmtF(custoReal(car||{custoTotal:0,id:-1}))}</b>`;
+  document.getElementById('edit-v-valor').value=v.valorDin||0;
+  document.getElementById('edit-v-troca').value=v.valorTroca||0;
+  document.getElementById('edit-v-comissao').value=v.comissao||0;
+  document.getElementById('edit-v-data').value=v.data||'';
+  document.getElementById('edit-v-comprador').value=v.comprador||'';
+  document.getElementById('edit-v-pagamento').value=v.pagamento||'Dinheiro';
+  document.getElementById('edit-v-obs').value=v.obs||'';
+  document.getElementById('edit-venda-preview').style.display='none';
+  document.getElementById('modal-edit-venda').classList.add('open');
+  updateEditVendaPreview();
+}
+
+function salvarEdicaoVenda(){
+  const idx=parseInt(document.getElementById('edit-venda-idx').value);
+  const v=D.vendas[idx]; if(!v) return;
+  const car=D.compras.find(c=>c.id===v.carId);
+  const valorDin=parseFloat(document.getElementById('edit-v-valor').value)||0;
+  const valorTroca=parseFloat(document.getElementById('edit-v-troca').value)||0;
+  const comissao=parseFloat(document.getElementById('edit-v-comissao').value)||0;
+  const gc=v.gc||totalGastos(v.carId);
+  const cr=car?custoReal(car):0;
+  const receita=valorDin+valorTroca, lucro=receita-cr-comissao;
+  D.vendas[idx]={
+    ...v, valorDin, valorTroca, receita, comissao, lucro, gc,
+    data:document.getElementById('edit-v-data').value||v.data,
+    comprador:document.getElementById('edit-v-comprador').value.trim(),
+    pagamento:document.getElementById('edit-v-pagamento').value,
+    obs:document.getElementById('edit-v-obs').value.trim()
+  };
+  save(); fecharModal('modal-edit-venda');
+  renderVendas(); renderDashboard(); toast('✅ Venda atualizada!');
+}
+
+// ===== DESFAZER/EXCLUIR VENDA =====
+function abrirExclusaoVenda(idx){
+  const v=D.vendas[idx]; if(!v) return;
+  const car=D.compras.find(c=>c.id===v.carId);
+  document.getElementById('del-venda-idx').value=idx;
+  const trocaInfo = v.trocaCarId ? ` | Troca recebida: ${(D.compras.find(c=>c.id===v.trocaCarId)||{marca:'?',modelo:''}).marca} ${(D.compras.find(c=>c.id===v.trocaCarId)||{marca:'',modelo:'?'}).modelo}` : '';
+  document.getElementById('del-venda-info').innerHTML=`Veículo: <b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b><br>Comprador: ${v.comprador||'—'} | Data: ${fmtDate(v.data)} | Receita: ${fmtF(v.receita)}${trocaInfo}`;
+  document.getElementById('modal-del-venda').classList.add('open');
+}
+
+function confirmarExclusaoVenda(){
+  const idx=parseInt(document.getElementById('del-venda-idx').value);
+  const v=D.vendas[idx]; if(!v) return;
+  // Remove carro da troca do estoque se não foi vendido
+  if(v.trocaCarId){
+    const trocaVendida=D.vendas.some((x,i)=>i!==idx&&x.carId===v.trocaCarId);
+    if(!trocaVendida){ D.compras=D.compras.filter(c=>c.id!==v.trocaCarId); D.gastos=D.gastos.filter(g=>g.carId!==v.trocaCarId); }
+  }
+  D.vendas.splice(idx,1); save(); fecharModal('modal-del-venda');
+  renderVendas(); renderDashboard(); toast('🗑️ Venda desfeita. Veículo retornou ao estoque.');
+}
+
+// ===== GASTOS =====
+function registrarGasto(){
+  const carId=parseInt(document.getElementById('g-carro').value)||0;
+  const valor=parseFloat(document.getElementById('g-valor').value)||0;
+  const dataG=document.getElementById('g-data').value;
+  if(!carId||!valor||!dataG){toast('Preencha: Veículo, Valor e Data.','err');return;}
+  D.gastos.push({id:NID++,carId,categoria:document.getElementById('g-categoria').value,desc:document.getElementById('g-desc').value.trim(),valor,data:dataG,fornecedor:document.getElementById('g-fornecedor').value.trim()});
+  save();
+  ['g-desc','g-valor','g-fornecedor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('g-carro').value=''; document.getElementById('g-data').value=today();
+  renderGastos(); renderDashboard(); toast('✅ Gasto registrado!');
+}
+
+function excluirGasto(id){
+  id=parseInt(id);
+  const g=D.gastos.find(x=>x.id===id); if(!g) return;
+  document.getElementById('del-gasto-id').value=id;
+  document.getElementById('del-gasto-info').innerHTML=`<b>${g.categoria}</b> — ${g.desc||'—'}<br>Valor: <b style="color:var(--red)">${fmtF(g.valor)}</b> &nbsp;|&nbsp; ${fmtDate(g.data)}`;
+  document.getElementById('modal-del-gasto').classList.add('open');
+}
+function confirmarExclusaoGasto(){
+  const id=parseInt(document.getElementById('del-gasto-id').value);
+  D.gastos=D.gastos.filter(g=>g.id!==id);
+  save(); fecharModal('modal-del-gasto'); renderGastos(); renderDashboard();
+}
+
+// ===== MODAL VENDER DO ESTOQUE =====
+function abrirModalVender(carId){
+  const car=D.compras.find(c=>c.id===carId), gc=totalGastos(carId), cr=custoReal(car);
+  document.getElementById('modal-car-id').value=carId;
+  document.getElementById('modal-data').value=today();
+  ['modal-valor','modal-comprador','modal-comissao','mt-marca','mt-modelo','mt-ano','mt-placa','mt-km','mt-valor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('modal-comissao').value='0';
+  document.getElementById('modal-tem-troca').checked=false;
+  document.getElementById('modal-troca-campos').style.display='none';
+  document.getElementById('modal-preview').style.display='none';
+  document.getElementById('modal-car-info').innerHTML=`<b>${car.marca} ${car.modelo} ${car.ano}</b>${car.placa?' — '+car.placa:''} &nbsp;|&nbsp; Compra: ${fmtF(car.custoTotal)} &nbsp;|&nbsp; Gastos: <span style="color:var(--purple)">${fmtF(gc)}</span> &nbsp;|&nbsp; <b>Custo real: ${fmtF(cr)}</b>`;
+  document.getElementById('modal-vender').classList.add('open');
+}
+
+function confirmarVendaModal(){
+  const carId=parseInt(document.getElementById('modal-car-id').value)||0;
+  const valorDin=parseFloat(document.getElementById('modal-valor').value)||0;
+  const dataV=document.getElementById('modal-data').value;
+  const temTroca=document.getElementById('modal-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('mt-valor').value)||0):0;
+  if(!dataV||(valorDin===0&&valorTroca===0)){toast('Informe data e valor.','err');return;}
+  const comissao=parseFloat(document.getElementById('modal-comissao').value)||0;
+  const car=D.compras.find(c=>c.id===carId);
+  const gc=totalGastos(carId), cr=custoReal(car);
+  const receita=valorDin+valorTroca, lucro=receita-cr-comissao;
+  let trocaCarId=null;
+  if(temTroca&&document.getElementById('mt-marca').value.trim()){
+    trocaCarId=NID++;
+    D.compras.push({
+      id:trocaCarId, marca:document.getElementById('mt-marca').value.trim(),
+      modelo:document.getElementById('mt-modelo').value.trim(),
+      ano:parseInt(document.getElementById('mt-ano').value)||0, cor:'',
+      placa:document.getElementById('mt-placa').value.trim().toUpperCase(),
+      km:parseInt(document.getElementById('mt-km').value)||0,
+      valor:valorTroca, custoPrep:0, custoTotal:valorTroca,
+      data:dataV, vendedor:document.getElementById('modal-comprador').value.trim(),
+      obs:`Recebido como troca na venda do ${car.marca} ${car.modelo} ${car.ano}`,
+      origemTroca:true, valorTroca, refVenda:`${car.marca} ${car.modelo} ${car.ano}`
+    });
+  }
+  D.vendas.push({carId,valorDin,valorTroca,receita,data:dataV,comprador:document.getElementById('modal-comprador').value.trim(),pagamento:document.getElementById('modal-pagamento').value,comissao,obs:'',lucro,gc,trocaCarId});
+  save(); fecharModal('modal-vender');
+  renderEstoque(); renderDashboard();
+  toast(trocaCarId?`✅ Venda confirmada! Lucro: ${fmtF(lucro)} — 🔄 Troca no estoque!`:`✅ Venda confirmada! Lucro: ${fmtF(lucro)}`);
+}
+
+// ===== MODAL GASTOS VIEW =====
+function abrirModalGastos(carId){
+  const car=D.compras.find(c=>c.id===carId), gastos=getGastos(carId), total=totalGastos(carId);
+  document.getElementById('modal-gastos-car-info').innerHTML=`<b>${car.marca} ${car.modelo} ${car.ano}</b>${car.placa?' — '+car.placa:''}`;
+  let html='';
+  if(!gastos.length){html='<div style="color:var(--muted);text-align:center;padding:1.5rem;font-size:0.9rem">Nenhum gasto para este veículo.<br>Vá em <b>🔧 Gastos</b> para adicionar.</div>';}
+  else{
+    gastos.forEach(g=>{
+      html+=`<div class="gasto-item"><div class="gasto-item-left"><div class="gasto-item-desc">${g.desc||g.categoria}</div><div class="gasto-item-meta"><span class="badge badge-purple" style="font-size:0.7rem">${g.categoria}</span> &nbsp;${fmtDate(g.data)}${g.fornecedor?' • '+g.fornecedor:''}</div></div><div class="gasto-item-val">${fmtF(g.valor)}</div></div>`;
+    });
+    html+=`<div class="gastos-total-row"><span>Total de gastos neste veículo</span><span style="color:var(--red);font-weight:700">${fmtF(total)}</span></div>`;
+  }
+  document.getElementById('modal-gastos-lista').innerHTML=html;
+  document.getElementById('modal-gastos-view').classList.add('open');
+}
+
+function fecharModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// ===== RENDERS =====
+function renderDashboard(){
+  const totalEntradas=D.vendas.reduce((s,v)=>s+v.receita,0);
+  const totalLucro=D.vendas.reduce((s,v)=>s+v.lucro,0);
+  const totalGastosAll=D.gastos.reduce((s,g)=>s+g.valor,0);
+  const estoque=getEstoque();
+  const capitalEst=estoque.reduce((s,c)=>s+c.custoTotal,0);
+  const totalSaidas=D.compras.reduce((s,c)=>s+c.custoTotal,0);
+  document.getElementById('kpi-lucro').textContent=fmt(totalLucro);
+  document.getElementById('kpi-lucro-sub').textContent=`${D.vendas.length} veículos vendidos`;
+  document.getElementById('kpi-entradas').textContent=fmt(totalEntradas);
+  document.getElementById('kpi-entradas-sub').textContent=`${D.vendas.length} vendas`;
+  document.getElementById('kpi-saidas').textContent=fmt(totalSaidas);
+  document.getElementById('kpi-saidas-sub').textContent=`${D.compras.length} compras`;
+  document.getElementById('kpi-gastos-dash').textContent=fmt(totalGastosAll);
+  document.getElementById('kpi-estoque').textContent=estoque.length;
+  document.getElementById('kpi-estoque-sub').textContent=`investido: ${fmt(capitalEst)}`;
+
+  const movs=[];
+  D.compras.forEach(c=>movs.push({tipo:c.origemTroca?'troca':'compra',data:c.data,desc:`${c.marca} ${c.modelo} ${c.ano}`,valor:c.custoTotal}));
+  D.vendas.forEach(v=>{const car=D.compras.find(c=>c.id===v.carId);if(car)movs.push({tipo:'venda',data:v.data,desc:`${car.marca} ${car.modelo} ${car.ano}`,valor:v.receita,lucro:v.lucro});});
+  D.gastos.forEach(g=>{const car=D.compras.find(c=>c.id===g.carId);if(car)movs.push({tipo:'gasto',data:g.data,desc:`${car.marca} ${car.modelo} — ${g.categoria}`,valor:g.valor});});
+  movs.sort((a,b)=>b.data.localeCompare(a.data));
+  const bm={venda:'green',compra:'red',troca:'purple',gasto:'yellow'};
+  const lm={venda:'VENDA',compra:'COMPRA',troca:'TROCA',gasto:'GASTO'};
+  const cont=document.getElementById('tabela-movimentacoes');
+  if(!movs.length){cont.innerHTML='<div class="empty-state"><div class="icon">📋</div>Nenhuma movimentação.</div>';return;}
+  cont.innerHTML=`<div style="overflow-x:auto"><table><thead><tr><th>Tipo</th><th>Descrição</th><th>Data</th><th>Valor</th><th>Lucro</th></tr></thead><tbody>${movs.slice(0,20).map(m=>`<tr><td><span class="badge badge-${bm[m.tipo]}">${lm[m.tipo]}</span></td><td>${m.desc}</td><td>${fmtDate(m.data)}</td><td class="${m.tipo==='venda'?'profit-pos':'profit-neg'}">${m.tipo==='venda'?'+':'−'}${fmt(m.valor)}</td><td>${m.tipo==='venda'?`<span class="${m.lucro>=0?'profit-pos':'profit-neg'}">${fmt(m.lucro)}</span>`:'—'}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+let _comprasFiltradas = null;
+function renderCompras(lista){
+  // inject filter bar if not present
+  const hdr=document.getElementById('filtro-bar-compras');
+  if(hdr) hdr.innerHTML=renderFiltroBar('compras','aplicarFiltroCompras()');
+  const {mes,ano}=filtrosMes('compras');
+  const tbody=document.getElementById('tbody-compras');
+  let dados=lista||D.compras;
+  dados=dados.filter(c=>dentroDoFiltro(c.data,mes,ano));
+  if(!dados.length){tbody.innerHTML='<tr><td colspan="12"><div class="empty-state"><div class="icon">🛒</div>Nenhuma compra no período.</div></td></tr>';return;}
+  const vendidos=new Set(D.vendas.map(v=>v.carId));
+  tbody.innerHTML=dados.slice().reverse().map(c=>{
+    const gc=totalGastos(c.id), cr=custoReal(c), isVendido=vendidos.has(c.id);
+    return `<tr>
+      <td><b>${c.marca} ${c.modelo}</b></td>
+      <td>${c.placa||'—'}</td><td>${c.ano||'—'}</td><td>${fmtKm(c.km)}</td>
+      <td>${fmt(c.valor)}</td><td>${fmt(c.custoPrep)}</td>
+      <td style="color:var(--purple)">${gc>0?fmt(gc):'—'}</td>
+      <td><b>${fmt(cr)}</b></td>
+      <td>${c.origemTroca?'<span class="badge badge-purple">TROCA</span>':'<span class="badge badge-blue">COMPRA</span>'}</td>
+      <td>${fmtDate(c.data)}</td>
+      <td><span class="badge badge-${isVendido?'green':'yellow'}">${isVendido?'VENDIDO':'ESTOQUE'}</span></td>
+      <td style="white-space:nowrap;display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-blue btn-sm" onclick="abrirEditarCompra(${c.id})">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="abrirExclusaoCompra(${c.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function aplicarFiltroCompras(){ renderCompras(); }
+
+function filtrarTabelaCompras(q){
+  const s=q.toLowerCase();
+  const filtrado=D.compras.filter(c=>`${c.marca} ${c.modelo} ${c.ano} ${c.placa} ${c.cor} ${c.vendedor}`.toLowerCase().includes(s));
+  renderCompras(filtrado);
+}
+
+function renderVendas(lista){
+  populateSelect('v-carro','estoque');
+  const hdr=document.getElementById('filtro-bar-vendas');
+  if(hdr) hdr.innerHTML=renderFiltroBar('vendas','aplicarFiltroVendas()');
+  const {mes,ano}=filtrosMes('vendas');
+  const tbody=document.getElementById('tbody-vendas');
+  let dados=lista||D.vendas;
+  dados=dados.filter(v=>dentroDoFiltro(v.data,mes,ano));
+  if(!dados.length){tbody.innerHTML='<tr><td colspan="11"><div class="empty-state"><div class="icon">💰</div>Nenhuma venda no período.</div></td></tr>';return;}
+  tbody.innerHTML=dados.map(v=>{
+    const realIdx=D.vendas.indexOf(v);
+    const car=D.compras.find(c=>c.id===v.carId);
+    const trocaCar=v.trocaCarId?D.compras.find(c=>c.id===v.trocaCarId):null;
+    return `<tr>
+      <td><b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b></td>
+      <td>${v.comprador||'—'}</td>
+      <td>${fmt(car?.custoTotal||0)}</td>
+      <td style="color:var(--purple)">${(v.gc||0)>0?fmt(v.gc):'—'}</td>
+      <td class="profit-pos">${fmt(v.valorDin)}</td>
+      <td>${v.valorTroca>0?`<span class="badge badge-purple">+${fmt(v.valorTroca)}</span>${trocaCar?`<br><small style="color:var(--muted)">${trocaCar.marca} ${trocaCar.modelo}</small>`:''}`:' — '}</td>
+      <td>${fmt(v.comissao)}</td>
+      <td class="${v.lucro>=0?'profit-pos':'profit-neg'}">${fmt(v.lucro)}</td>
+      <td>${fmtDate(v.data)}</td>
+      <td><span class="badge badge-blue">${v.pagamento}</span></td>
+      <td style="white-space:nowrap;display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-blue btn-sm" onclick="abrirEditarVenda(${realIdx})">✏️</button>
+        <button class="btn btn-success btn-sm" title="Repassar 50% p/ Antônio" onclick="abrirRepasseVenda(${realIdx})">💸 Repassar</button>
+        <button class="btn btn-danger btn-sm" onclick="abrirExclusaoVenda(${realIdx})">↩️</button>
+      </td>
+    </tr>`;
+  }).reverse().join('');
+}
+
+function aplicarFiltroVendas(){ renderVendas(); }
+
+function filtrarTabelaVendas(q){
+  const s=q.toLowerCase();
+  const filtrado=D.vendas.filter(v=>{
+    const car=D.compras.find(c=>c.id===v.carId);
+    return `${car?.marca} ${car?.modelo} ${car?.ano} ${v.comprador} ${v.pagamento}`.toLowerCase().includes(s);
+  });
+  renderVendas(filtrado);
+}
+
+function renderGastos(){
+  populateSelect('g-carro','todos'); populateSelect('filtro-gastos-car','todos');
+  const hdr=document.getElementById('filtro-bar-gastos');
+  if(hdr) hdr.innerHTML=renderFiltroBar('gastos','aplicarFiltroGastos()');
+  const {mes,ano}=filtrosMes('gastos');
+  const filtroId=parseInt(document.getElementById('filtro-gastos-car').value)||0;
+  let lista=filtroId?D.gastos.filter(g=>g.carId===filtroId):D.gastos;
+  lista=lista.filter(g=>dentroDoFiltro(g.data,mes,ano));
+  const tbody=document.getElementById('tbody-gastos');
+  if(!lista.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">🔧</div>Nenhum gasto no período.</div></td></tr>';return;}
+  tbody.innerHTML=lista.slice().reverse().map(g=>{
+    const car=D.compras.find(c=>c.id===g.carId);
+    return `<tr><td><b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b></td><td><span class="badge badge-purple">${g.categoria}</span></td><td>${g.desc||'—'}</td><td class="profit-neg">${fmtF(g.valor)}</td><td>${fmtDate(g.data)}</td><td>${g.fornecedor||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="excluirGasto(${g.id})">🗑</button></td></tr>`;
+  }).join('');
+}
+
+function aplicarFiltroGastos(){ renderGastos(); }
+
+function renderEstoque(){
+  const estoque=getEstoque();
+  const capital=estoque.reduce((s,c)=>s+c.custoTotal,0);
+  const gastosEst=estoque.reduce((s,c)=>s+totalGastos(c.id),0);
+  document.getElementById('est-qtd').textContent=estoque.length;
+  document.getElementById('est-capital').textContent=fmt(capital);
+  document.getElementById('est-gastos').textContent=fmt(gastosEst);
+  document.getElementById('est-custo-real').textContent=fmt(capital+gastosEst);
+  const grid=document.getElementById('estoque-grid');
+  if(!estoque.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">🚗</div>Nenhum veículo em estoque.</div>';return;}
+  renderCards(estoque,grid);
+}
+
+function renderCards(lista,grid){
+  grid.innerHTML=lista.map(c=>{
+    const gc=totalGastos(c.id), cr=custoReal(c), ng=getGastos(c.id).length;
+    return `<div class="car-card">
+      <div class="car-card-top">${c.origemTroca?'🔄':'🚗'}</div>
+      <div class="car-card-body">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <div>
+            <div class="car-card-name">${c.marca} ${c.modelo}</div>
+            <div class="car-card-meta">${c.ano||''} ${c.cor?'• '+c.cor:''} ${c.placa?'• '+c.placa:''}</div>
+            ${c.km?`<div class="car-card-meta">${fmtKm(c.km)}</div>`:''}
+          </div>
+          ${c.origemTroca?'<span class="badge badge-purple" style="font-size:0.7rem;height:fit-content">TROCA</span>':''}
+        </div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:10px">Custo de compra</div>
+        <div class="car-card-price">${fmt(c.custoTotal)}</div>
+        ${gc>0?`<div style="display:flex;justify-content:space-between;font-size:0.82rem;background:rgba(168,85,247,0.08);border-radius:6px;padding:6px 10px;margin-bottom:6px"><span style="color:var(--muted)">Gastos adicionais</span><span style="color:var(--purple);font-weight:600">${fmt(gc)}</span></div>`:''}
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:600;background:var(--surface2);border-radius:6px;padding:7px 10px"><span style="color:var(--muted)">Custo real total</span><span style="color:var(--red)">${fmt(cr)}</span></div>
+        ${c.obs?`<div style="font-size:0.75rem;color:var(--muted);margin-top:8px">${c.obs}</div>`:''}
+      </div>
+      <div class="car-card-footer">
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button class="btn btn-blue btn-sm" onclick="abrirEditarCompra(${c.id})" title="Editar dados">✏️ Editar</button>
+          <button class="btn btn-purple btn-sm" onclick="abrirModalGastos(${c.id})">🔧${ng>0?' ('+ng+')':''}</button>
+        </div>
+        <button class="btn btn-success btn-sm" onclick="abrirModalVender(${c.id})">💰 Vender</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filtrarEstoque(q){
+  const estoque=getEstoque(), s=q.toLowerCase();
+  const filtrado=estoque.filter(c=>`${c.marca} ${c.modelo} ${c.ano} ${c.placa} ${c.cor}`.toLowerCase().includes(s));
+  const grid=document.getElementById('estoque-grid');
+  if(!filtrado.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div>Nenhum resultado.</div>';return;}
+  renderCards(filtrado,grid);
+}
+
+function barChart(arr,colorClass=''){
+  if(!arr.length) return '<div style="color:var(--muted);text-align:center;padding:2rem">Sem dados ainda</div>';
+  const max=Math.max(...arr.map(x=>Math.abs(x.val)),1);
+  return arr.map(x=>`<div class="chart-bar-item"><div class="chart-bar-label"><span>${x.nome}</span><span style="color:${x.val<0?'var(--red)':colorClass?colorClass:'var(--text)'}">${fmt(x.val)}</span></div><div class="chart-bar-bg"><div class="chart-bar-fill ${colorClass}" style="width:${(Math.abs(x.val)/max*100).toFixed(0)}%;${x.val<0?'background:var(--red)':''}"></div></div></div>`).join('');
+}
+
+function renderRelatorio(){
+  const vendas=D.vendas;
+  const totalLucro=vendas.reduce((s,v)=>s+v.lucro,0);
+  const totalReceita=vendas.reduce((s,v)=>s+v.receita,0);
+  const ticket=vendas.length?totalReceita/vendas.length:0;
+  const margMedia=vendas.length?vendas.reduce((s,v)=>s+(v.lucro/Math.max(v.receita,1)*100),0)/vendas.length:0;
+  const totalGastosAll=D.gastos.reduce((s,g)=>s+g.valor,0);
+  const custoMedioReal=D.compras.length?D.compras.reduce((s,c)=>s+custoReal(c),0)/D.compras.length:0;
+  document.getElementById('r-lucro').textContent=fmt(totalLucro);
+  document.getElementById('r-ticket').textContent=fmt(ticket);
+  document.getElementById('r-margem').textContent=margMedia.toFixed(1)+'%';
+  document.getElementById('r-gastos-total').textContent=fmt(totalGastosAll);
+  document.getElementById('r-custo-medio').textContent=fmt(custoMedioReal);
+
+  const lv=vendas.map(v=>{const car=D.compras.find(c=>c.id===v.carId);return{nome:car?`${car.marca} ${car.modelo}`:String(v.carId),val:v.lucro};}).sort((a,b)=>b.val-a.val).slice(0,6);
+  document.getElementById('chart-lucro').innerHTML=barChart(lv,'green');
+
+  const cats={};
+  D.gastos.forEach(g=>{cats[g.categoria]=(cats[g.categoria]||0)+g.valor;});
+  document.getElementById('chart-gastos-cat').innerHTML=barChart(Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>({nome:k,val:v})),'purple');
+
+  const marcas={};
+  D.compras.forEach(c=>{marcas[c.marca]=(marcas[c.marca]||0)+1;});
+  document.getElementById('chart-marcas').innerHTML=barChart(Object.entries(marcas).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>({nome:k,val:v})));
+
+  const tbody=document.getElementById('tbody-relatorio');
+  if(!vendas.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><div class="icon">📊</div>Sem vendas.</div></td></tr>';return;}
+  tbody.innerHTML=vendas.slice().reverse().map(v=>{
+    const car=D.compras.find(c=>c.id===v.carId);
+    const trocaCar=v.trocaCarId?D.compras.find(c=>c.id===v.trocaCarId):null;
+    const marg=v.receita>0?((v.lucro/v.receita)*100).toFixed(1):0;
+    return `<tr><td><b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b></td><td>${fmt(car?.custoTotal||0)}</td><td style="color:var(--purple)">${(v.gc||0)>0?fmt(v.gc):'—'}</td><td>${v.valorTroca>0?`<span class="badge badge-purple">+${fmt(v.valorTroca)}</span>${trocaCar?`<br><small>${trocaCar.marca} ${trocaCar.modelo}</small>`:''}`:' — '}</td><td>${fmt(v.valorDin)}</td><td class="profit-pos">${fmt(v.receita)}</td><td>${fmt(v.comissao)}</td><td class="${v.lucro>=0?'profit-pos':'profit-neg'}">${fmt(v.lucro)}</td><td><span class="badge badge-${v.lucro>=0?'green':'red'}">${marg}%</span></td></tr>`;
+  }).join('');
+}
+
+// ===== ACERTOS =====
+
+function populateAcertoCarro(){
+  const sel=document.getElementById('ac-carro');
+  if(!sel) return;
+  sel.innerHTML='<option value="">Nenhum / geral</option>';
+  D.compras.forEach(c=>{
+    const vendido=D.vendas.some(v=>v.carId===c.id);
+    sel.innerHTML+=`<option value="${c.id}">${c.marca} ${c.modelo} ${c.ano||''}${c.placa?' — '+c.placa:''}${vendido?' (vendido)':' (estoque)'}</option>`;
+  });
+}
+
+function onTipoAcertoChange(){
+  // veículo sempre visível — pode ser útil nos dois casos
+  document.getElementById('ac-carro-group').style.display='flex';
+}
+
+function registrarAcerto(){
+  const tipo=document.getElementById('ac-tipo').value;
+  const valor=parseFloat(document.getElementById('ac-valor').value)||0;
+  const data=document.getElementById('ac-data').value;
+  const desc=document.getElementById('ac-desc').value.trim();
+  const carId=parseInt(document.getElementById('ac-carro').value)||0;
+  if(!valor||!data){toast('Preencha Valor e Data.','err');return;}
+
+  const tipoLabels={
+    joao_deve_antonio:'💸 João Devendo Antônio',
+    antonio_deve_joao:'💸 Antônio Devendo João'
+  };
+
+  D.acertos.push({
+    id:NID++, tipo, valor, data, desc, carId,
+    label:tipoLabels[tipo]||tipo,
+    status:'pendente',
+    obsQuitar:'',
+    dataQuitar:''
+  });
+  save();
+  ['ac-valor','ac-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ac-data').value=today();
+  document.getElementById('ac-carro').value='';
+  renderAcertos(); renderVeredicto();
+  toast('✅ Movimentação registrada!');
+}
+
+// Botão rápido "Repassar para Antônio" vindo de uma venda
+function abrirRepasseVenda(vendaIdx){
+  const v=D.vendas[vendaIdx];
+  if(!v){toast('Venda não encontrada.','err');return;}
+  const car=D.compras.find(c=>c.id===v.carId);
+  const parteAntonio=v.lucro/2;
+  if(parteAntonio<=0){
+    toast('Esta venda sem lucro positivo.','err');return;
+  }
+  const acertosTab=Array.from(document.querySelectorAll('.nav-tab')).find(t=>t.textContent.includes('Acertos'));
+  showTab('acertos', acertosTab);
+  setTimeout(()=>{
+    document.getElementById('ac-tipo').value='joao_deve_antonio';
+    onTipoAcertoChange();
+    document.getElementById('ac-valor').value=parteAntonio.toFixed(2);
+    document.getElementById('ac-desc').value=`Repasse 50% lucro — ${car?car.marca+' '+car.modelo+' '+car.ano:'venda #'+vendaIdx}`;
+    document.getElementById('ac-data').value=v.data||today();
+  },50);
+}
+
+function quitarAcerto(id){
+  const ac=D.acertos.find(a=>a.id===id);
+  if(!ac) return;
+  document.getElementById('quitar-ac-id').value=id;
+  document.getElementById('quitar-ac-info').innerHTML=`<b>${ac.label}</b><br>${ac.desc||'—'} &nbsp;|&nbsp; Valor: <b style="color:var(--green)">${fmtF(ac.valor)}</b>`;
+  document.getElementById('quitar-ac-obs').value='';
+  document.getElementById('modal-quitar-acerto').classList.add('open');
+}
+
+function confirmarQuitar(){
+  const id=parseInt(document.getElementById('quitar-ac-id').value);
+  const idx=D.acertos.findIndex(a=>a.id===id);
+  if(idx<0) return;
+  D.acertos[idx].status='quitado';
+  D.acertos[idx].dataQuitar=today();
+  D.acertos[idx].obsQuitar=document.getElementById('quitar-ac-obs').value.trim();
+  save(); fecharModal('modal-quitar-acerto');
+  renderAcertos(); renderVeredicto();
+  toast('✅ Marcado como quitado!');
+}
+
+function excluirAcerto(id){
+  id = parseInt(id);
+  const ac = D.acertos.find(a=>a.id===id);
+  if(!ac){ return; }
+  document.getElementById('del-ac-id').value = id;
+  document.getElementById('del-ac-info').innerHTML =
+    `<b>${ac.label}</b><br>${ac.desc||'—'} &nbsp;|&nbsp; Valor: <b style="color:var(--red)">${fmtF(ac.valor)}</b> &nbsp;|&nbsp; ${fmtDate(ac.data)}`;
+  document.getElementById('modal-del-acerto').classList.add('open');
+}
+
+function confirmarExclusaoAcerto(){
+  const id = parseInt(document.getElementById('del-ac-id').value);
+  D.acertos = D.acertos.filter(a=>a.id!==id);
+  save();
+  fecharModal('modal-del-acerto');
+  renderAcertos();
+  renderVeredicto();
+}
+
+function renderAcertos(){
+  populateAcertoCarro();
+  const hdr=document.getElementById('filtro-bar-acertos');
+  if(hdr) hdr.innerHTML=renderFiltroBar('acertos','aplicarFiltroAcertos()');
+  const {mes,ano}=filtrosMes('acertos');
+  const filtroStatus=document.getElementById('filtro-ac-status')?.value||'';
+  let lista=D.acertos.slice().reverse();
+  if(filtroStatus) lista=lista.filter(a=>a.status===filtroStatus);
+  lista=lista.filter(a=>dentroDoFiltro(a.data,mes,ano));
+  const tbody=document.getElementById('tbody-acertos');
+  if(!lista.length){
+    tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="icon">🤝</div>Nenhuma movimentação no período.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML=lista.map(a=>{
+    const car=a.carId?D.compras.find(c=>c.id===a.carId):null;
+    const isJoaoDeve=a.tipo==='joao_deve_antonio';
+    const badgeClass=isJoaoDeve?'badge-yellow':'badge-blue';
+    const corVal=isJoaoDeve?'var(--accent)':'var(--blue)';
+    return `<tr>
+      <td><span class="badge ${badgeClass}">${a.label}</span></td>
+      <td>${a.desc||'—'}</td>
+      <td>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</td>
+      <td style="color:${corVal};font-weight:700">${fmtF(a.valor)}</td>
+      <td>${fmtDate(a.data)}</td>
+      <td>${a.status==='quitado'
+        ?`<span class="badge badge-green">✅ Quitado${a.dataQuitar?' — '+fmtDate(a.dataQuitar):''}</span>${a.obsQuitar?`<br><small style="color:var(--muted)">${a.obsQuitar}</small>`:''}`
+        :`<span class="badge badge-yellow">⏳ Pendente</span>`}
+      </td>
+      <td style="white-space:nowrap;display:flex;gap:4px">
+        ${a.status==='pendente'?`<button class="btn btn-success btn-sm" onclick="quitarAcerto(${a.id})">✅ Quitar</button>`:''}
+        <button class="btn btn-blue btn-sm" onclick="abrirEditarAcerto(${a.id})">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="excluirAcerto(${a.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function aplicarFiltroAcertos(){ renderAcertos(); renderVeredicto(); }
+
+function renderVeredicto(){
+  // João devendo Antônio (pendente = ainda não quitado)
+  const joaoDeveTotal   = D.acertos.filter(a=>a.tipo==='joao_deve_antonio'  && a.status==='pendente').reduce((s,a)=>s+a.valor,0);
+  // Antônio devendo João (pendente)
+  const antonioDeveTotal= D.acertos.filter(a=>a.tipo==='antonio_deve_joao'  && a.status==='pendente').reduce((s,a)=>s+a.valor,0);
+
+  // Totais gerais (incluindo quitados) para os cards de resumo
+  const joaoDeveTotalGeral   = D.acertos.filter(a=>a.tipo==='joao_deve_antonio').reduce((s,a)=>s+a.valor,0);
+  const antonioDeveTotalGeral= D.acertos.filter(a=>a.tipo==='antonio_deve_joao').reduce((s,a)=>s+a.valor,0);
+  const joaoJaQuitou   = D.acertos.filter(a=>a.tipo==='joao_deve_antonio'  && a.status==='quitado').reduce((s,a)=>s+a.valor,0);
+  const antonioJaQuitou= D.acertos.filter(a=>a.tipo==='antonio_deve_joao'  && a.status==='quitado').reduce((s,a)=>s+a.valor,0);
+
+  // Saldo líquido pendente: positivo = João deve Antônio; negativo = Antônio deve João
+  const saldoLiquido = joaoDeveTotal - antonioDeveTotal;
+
+  // --- Cards ---
+  document.getElementById('a-lucro-share').textContent = fmtF(joaoDeveTotalGeral);
+  document.getElementById('a-deve-gastos').textContent = '✅ ' + fmtF(joaoJaQuitou);
+  document.getElementById('a-repasses').textContent    = fmtF(joaoDeveTotal);
+  document.getElementById('a-quitados').textContent    = fmtF(joaoJaQuitou);
+
+  document.getElementById('j-lucro-share').textContent = fmtF(antonioDeveTotalGeral);
+  document.getElementById('j-gastos-pagos').textContent= '✅ ' + fmtF(antonioJaQuitou);
+  document.getElementById('j-repasses').textContent    = fmtF(antonioDeveTotal);
+  document.getElementById('j-quitados').textContent    = fmtF(antonioJaQuitou);
+
+  // --- Saldo boxes ---
+  const aSaldoBox=document.getElementById('a-saldo-box');
+  const aSaldoVal=document.getElementById('a-saldo-val');
+  const aSaldoLbl=document.getElementById('a-saldo-label');
+  const jSaldoBox=document.getElementById('j-saldo-box');
+  const jSaldoVal=document.getElementById('j-saldo-val');
+  const jSaldoLbl=document.getElementById('j-saldo-label');
+  const veredictoCard=document.getElementById('veredicto-card');
+  const veredictoText=document.getElementById('veredicto-text');
+  const veredictoSub =document.getElementById('veredicto-sub');
+
+  if(Math.abs(saldoLiquido)<0.01){
+    aSaldoBox.className='saldo-box zerado'; aSaldoLbl.textContent='Sem pendências'; aSaldoVal.style.color='var(--muted)'; aSaldoVal.textContent='R$ 0';
+    jSaldoBox.className='saldo-box zerado'; jSaldoLbl.textContent='Sem pendências'; jSaldoVal.style.color='var(--muted)'; jSaldoVal.textContent='R$ 0';
+    veredictoCard.style.borderTop='3px solid var(--green)';
+    veredictoText.textContent='✅ Tudo Acertado Entre os Sócios!';
+    veredictoSub.textContent='Nenhum valor pendente entre Antônio e João.';
+  } else if(saldoLiquido>0){
+    // João deve Antônio
+    aSaldoBox.className='saldo-box receber'; aSaldoLbl.textContent='A receber de João'; aSaldoVal.style.color='var(--green)'; aSaldoVal.textContent=fmtF(saldoLiquido);
+    jSaldoBox.className='saldo-box pagar';   jSaldoLbl.textContent='A pagar p/ Antônio'; jSaldoVal.style.color='var(--red)';   jSaldoVal.textContent=fmtF(saldoLiquido);
+    veredictoCard.style.borderTop='3px solid var(--accent)';
+    veredictoText.textContent=`João deve pagar ${fmtF(saldoLiquido)} para Antônio`;
+    veredictoSub.textContent='Valor líquido pendente após descontar acertos já quitados.';
+  } else {
+    // Antônio deve João
+    const val=Math.abs(saldoLiquido);
+    aSaldoBox.className='saldo-box pagar';   aSaldoLbl.textContent='A pagar p/ João';   aSaldoVal.style.color='var(--red)';   aSaldoVal.textContent=fmtF(val);
+    jSaldoBox.className='saldo-box receber'; jSaldoLbl.textContent='A receber de Antônio'; jSaldoVal.style.color='var(--green)'; jSaldoVal.textContent=fmtF(val);
+    veredictoCard.style.borderTop='3px solid var(--blue)';
+    veredictoText.textContent=`Antônio deve pagar ${fmtF(val)} para João`;
+    veredictoSub.textContent='Valor líquido pendente após descontar acertos já quitados.';
+  }
+}
+
+// ===== EDITAR ACERTO =====
+function abrirEditarAcerto(id){
+  const a=D.acertos.find(x=>x.id===id); if(!a) return;
+  document.getElementById('edit-ac-id').value=id;
+  document.getElementById('edit-ac-tipo').value=a.tipo;
+  document.getElementById('edit-ac-valor').value=a.valor;
+  document.getElementById('edit-ac-data').value=a.data;
+  document.getElementById('edit-ac-desc').value=a.desc||'';
+  // populate carro select
+  const sel=document.getElementById('edit-ac-carro');
+  sel.innerHTML='<option value="">Nenhum / geral</option>';
+  D.compras.forEach(c=>{ sel.innerHTML+=`<option value="${c.id}"${a.carId===c.id?' selected':''}>${c.marca} ${c.modelo} ${c.ano||''}${c.placa?' — '+c.placa:''}</option>`; });
+  document.getElementById('modal-edit-acerto').classList.add('open');
+}
+
+function salvarEdicaoAcerto(){
+  const id=parseInt(document.getElementById('edit-ac-id').value);
+  const idx=D.acertos.findIndex(a=>a.id===id); if(idx<0) return;
+  const tipo=document.getElementById('edit-ac-tipo').value;
+  const valor=parseFloat(document.getElementById('edit-ac-valor').value)||0;
+  const data=document.getElementById('edit-ac-data').value;
+  if(!valor||!data){toast('Preencha Valor e Data.','err');return;}
+  const tipoLabels={joao_deve_antonio:'💸 João Devendo Antônio',antonio_deve_joao:'💸 Antônio Devendo João'};
+  D.acertos[idx]={
+    ...D.acertos[idx], tipo, valor, data,
+    label:tipoLabels[tipo],
+    desc:document.getElementById('edit-ac-desc').value.trim(),
+    carId:parseInt(document.getElementById('edit-ac-carro').value)||0
+  };
+  save(); fecharModal('modal-edit-acerto');
+  renderAcertos(); renderVeredicto();
+  toast('✅ Acerto atualizado!');
+}
+
+// ===== FILTROS DE DATA =====
+function filtrosMes(secao){
+  // Retorna {mes, ano} selecionados para a seção
+  const m=document.getElementById(`filtro-mes-${secao}`)?.value||'';
+  const a=document.getElementById(`filtro-ano-${secao}`)?.value||'';
+  return {mes:m, ano:a};
+}
+
+function dentroDoFiltro(dataStr, mes, ano){
+  if(!mes&&!ano) return true;
+  if(!dataStr) return false;
+  const [y,m]=dataStr.split('-');
+  if(ano&&y!==ano) return false;
+  if(mes&&m!==mes) return false;
+  return true;
+}
+
+function renderFiltroBar(secao, onchange){
+  const anos=new Set();
+  if(secao==='compras') D.compras.forEach(c=>c.data&&anos.add(c.data.split('-')[0]));
+  if(secao==='vendas')  D.vendas.forEach(v=>v.data&&anos.add(v.data.split('-')[0]));
+  if(secao==='gastos')  D.gastos.forEach(g=>g.data&&anos.add(g.data.split('-')[0]));
+  if(secao==='acertos') D.acertos.forEach(a=>a.data&&anos.add(a.data.split('-')[0]));
+  const anosArr=[...anos].sort().reverse();
+  const meses=[['01','Janeiro'],['02','Fevereiro'],['03','Março'],['04','Abril'],['05','Maio'],['06','Junho'],['07','Julho'],['08','Agosto'],['09','Setembro'],['10','Outubro'],['11','Novembro'],['12','Dezembro']];
+  const style=`background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.82rem;outline:none;`;
+  return `
+    <select id="filtro-mes-${secao}" style="${style}" onchange="${onchange}">
+      <option value="">Todos os meses</option>
+      ${meses.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}
+    </select>
+    <select id="filtro-ano-${secao}" style="${style}" onchange="${onchange}">
+      <option value="">Todos os anos</option>
+      ${anosArr.map(a=>`<option value="${a}">${a}</option>`).join('')}
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="limparFiltro('${secao}','${onchange}')">✕ Limpar</button>`;
+}
+
+function limparFiltro(secao, onchange){
+  const m=document.getElementById(`filtro-mes-${secao}`);
+  const a=document.getElementById(`filtro-ano-${secao}`);
+  if(m) m.value=''; if(a) a.value='';
+  eval(onchange.replace('()','()'));
+}
+
+// ===== INIT =====
+document.getElementById('headerDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('c-data').value=today();
+document.getElementById('v-data').value=today();
+document.getElementById('g-data').value=today();
+document.getElementById('ac-data').value=today();
+onTipoAcertoChange();
+renderDashboard(); renderCompras();
+['modal-vender','modal-gastos-view','modal-edit-compra','modal-edit-venda','modal-del-venda','modal-del-compra','modal-quitar-acerto','modal-edit-acerto','modal-del-acerto','modal-del-gasto'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)fecharModal(id);});
+});
+</script>
+<!-- MODAL EXCLUIR ACERTO -->
+<div class="modal-overlay" id="modal-del-acerto">
+  <div class="modal">
+    <div class="modal-title">🗑️ Excluir Acerto</div>
+    <input type="hidden" id="del-ac-id">
+    <div class="warn-box">
+      ⚠️ <b>Atenção:</b> Esta movimentação será removida permanentemente. Esta ação não pode ser desfeita.
+    </div>
+    <div class="info-bar" id="del-ac-info"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-del-acerto')">Cancelar</button>
+      <button class="btn btn-danger" style="padding:10px 20px" onclick="confirmarExclusaoAcerto()">🗑️ Confirmar Exclusão</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR ACERTO -->
+<div class="modal-overlay" id="modal-edit-acerto">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar Acerto</div>
+    <input type="hidden" id="edit-ac-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="edit-ac-tipo">
+          <option value="joao_deve_antonio">💸 João Devendo Antônio</option>
+          <option value="antonio_deve_joao">💸 Antônio Devendo João</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input type="number" id="edit-ac-valor" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="edit-ac-data">
+      </div>
+      <div class="form-group">
+        <label>Veículo (opcional)</label>
+        <select id="edit-ac-carro"><option value="">Nenhum / geral</option></select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Descrição / Observação</label>
+      <input type="text" id="edit-ac-desc" placeholder="Ex: Repasse venda do Civic...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-edit-acerto')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEdicaoAcerto()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL QUITAR ACERTO -->
+<div class="modal-overlay" id="modal-quitar-acerto">
+  <div class="modal">
+    <div class="modal-title">✅ Marcar como Quitado</div>
+    <input type="hidden" id="quitar-ac-id">
+    <div class="info-bar" id="quitar-ac-info"></div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Observação (opcional)</label>
+      <input type="text" id="quitar-ac-obs" placeholder="Ex: Pago via PIX em 10/05">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-quitar-acerto')">Cancelar</button>
+      <button class="btn btn-success" style="padding:10px 20px" onclick="confirmarQuitar()">✅ Confirmar Quitação</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<!-- MODAL EXCLUIR GASTO -->
+<div class="modal-overlay" id="modal-del-gasto">
+  <div class="modal">
+    <div class="modal-title">🗑️ Excluir Gasto</div>
+    <input type="hidden" id="del-gasto-id">
+    <div class="warn-box">⚠️ <b>Atenção:</b> Este gasto será removido permanentemente.</div>
+    <div class="info-bar" id="del-gasto-info"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-del-gasto')">Cancelar</button>
+      <button class="btn btn-danger" style="padding:10px 20px" onclick="confirmarExclusaoGasto()">🗑️ Confirmar</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+// ===== CONFIG NUVEM =====
+var API_URL = 'https://script.google.com/macros/s/AKfycbx-Io_00vgnqeMPCwxeLOBEZ0KIYkxQ5sAaGSWnS4UMO0mwwLckRh6L1NIy5NjwN-ZAOQ/exec';
+var USUARIO_LOGADO = null;
+var SENHA_LOGADA = null;
+var salvandoNuvem = false;
+
+
+function apiFetch(params, callback) {
+  var url = API_URL + '?' + Object.keys(params).map(function(k){
+    return k + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  
+  var cbName = 'cb_' + Date.now();
+  params.callback = cbName;
+  
+  url = API_URL + '?' + Object.keys(params).map(function(k){
+    return k + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+
+  var done = false;
+  window[cbName] = function(res) {
+    done = true;
+    try{ delete window[cbName]; }catch(e){}
+    try{ document.head.removeChild(script); }catch(e){}
+    callback(null, res);
+  };
+
+  var script = document.createElement('script');
+  script.src = url;
+  script.onerror = function() {
+    if(!done){
+      done = true;
+      try{ delete window[cbName]; }catch(e){}
+      callback(new Error('Sem conexao'), null);
+    }
+  };
+  document.head.appendChild(script);
+
+  setTimeout(function(){
+    if(!done){
+      done = true;
+      try{ delete window[cbName]; }catch(e){}
+      try{ document.head.removeChild(script); }catch(e){}
+      callback(new Error('Timeout'), null);
+    }
+  }, 15000);
+}
+
+function fazerLogin() {
+  var usuario = document.getElementById('login-usuario').value;
+  var senha = document.getElementById('login-senha').value;
+  if(!senha) { mostrarErroLogin('Digite a senha.'); return; }
+  var btn = document.querySelector('.login-btn');
+  btn.textContent = 'Entrando...';
+  btn.disabled = true;
+  apiFetch({action:'login', usuario:usuario, senha:senha}, function(err, res) {
+    if(err) {
+      mostrarErroLogin('Sem conexao com a internet.');
+      btn.textContent = 'Entrar';
+      btn.disabled = false;
+      return;
+    }
+    if(res.ok) {
+      USUARIO_LOGADO = usuario;
+      SENHA_LOGADA = senha;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('sync-bar').style.display = 'flex';
+      document.getElementById('sync-usuario').textContent = usuario === 'antonio' ? 'Antonio' : 'Joao';
+      carregarDaNuvem();
+    } else {
+      mostrarErroLogin(res.erro || 'Erro ao entrar.');
+      btn.textContent = 'Entrar';
+      btn.disabled = false;
+    }
+  });
+}
+
+function fazerLogout() {
+  USUARIO_LOGADO = null;
+  SENHA_LOGADA = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('sync-bar').style.display = 'none';
+  document.getElementById('login-senha').value = '';
+  document.querySelector('.login-btn').textContent = 'Entrar';
+  document.querySelector('.login-btn').disabled = false;
+}
+
+function mostrarErroLogin(msg) {
+  var el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function carregarDaNuvem() {
+  setSyncStatus('syncing', 'Carregando...');
+  apiFetch({action:'carregar', usuario:USUARIO_LOGADO, senha:SENHA_LOGADA}, function(err, res) {
+    if(err){ setSyncStatus('err', 'Sem conexao'); return; }
+    if(res.ok && res.dados) {
+      D = res.dados;
+      if(!D.compras) D.compras=[];
+      if(!D.vendas)  D.vendas=[];
+      if(!D.gastos)  D.gastos=[];
+      if(!D.acertos) D.acertos=[];
+      if(!D.nextId)  D.nextId=1;
+      NID = D.nextId || 1;
+      setSyncStatus('ok', 'Sincronizado');
+      renderDashboard();
+      renderCompras();
+    } else {
+      setSyncStatus('err', 'Erro ao carregar');
+    }
+  });
+}
+
+function salvarNaNuvem() {
+  if(!USUARIO_LOGADO || salvandoNuvem) return;
+  salvandoNuvem = true;
+  setSyncStatus('syncing', 'Salvando...');
+  D.nextId = NID;
+  apiFetch({action:'salvar', usuario:USUARIO_LOGADO, senha:SENHA_LOGADA, dados:JSON.stringify(D)}, function(err, res) {
+    salvandoNuvem = false;
+    if(err){ setSyncStatus('err', 'Sem conexao'); return; }
+    if(res.ok) {
+      setSyncStatus('ok', 'Sincronizado as ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}));
+    } else {
+      setSyncStatus('err', 'Erro ao salvar');
+    }
+  });
+}
+
+function setSyncStatus(tipo, msg) {
+  var dot = document.getElementById('sync-dot');
+  var txt = document.getElementById('sync-text');
+  dot.className = 'sync-dot' + (tipo === 'ok' ? '' : tipo === 'syncing' ? ' syncing' : ' err');
+  txt.textContent = msg;
+}
+
+
+// ===== STATE =====
+let _storage = {};
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return _storage[k]||null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _storage[k]=v; } }
+
+let D = JSON.parse(lsGet('cv4') || '{"compras":[],"vendas":[],"gastos":[],"acertos":[]}');
+let NID = parseInt(lsGet('cv4_id') || '1');
+
+// Garante que todos os arrays existem (proteção contra dados antigos)
+if(!D.compras) D.compras=[];
+if(!D.vendas)  D.vendas=[];
+if(!D.gastos)  D.gastos=[];
+if(!D.acertos) D.acertos=[];
+
+// Migração de dados de versão anterior
+(function migrar(){
+  const old = lsGet('cv3');
+  if(old && !lsGet('cv4')){
+    try{
+      D = JSON.parse(old);
+      if(!D.compras) D.compras=[];
+      if(!D.vendas)  D.vendas=[];
+      if(!D.gastos)  D.gastos=[];
+      if(!D.acertos) D.acertos=[];
+      lsSet('cv4', JSON.stringify(D));
+    }catch(e){}
+  }
+})();
+
+function save(){
+  lsSet('cv4', JSON.stringify(D));
+  lsSet('cv4_id', NID);
+  salvarNaNuvem();
+}
+
+// ===== TOAST (substitui alert/confirm no iOS Safari) =====
+function toast(msg, tipo){
+  const c=document.getElementById('toast-container');
+  const el=document.createElement('div');
+  el.className='toast-msg '+(tipo==='err'?'err':'ok');
+  el.textContent=msg;
+  c.appendChild(el);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ el.classList.add('show'); }); });
+  setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(), 350); }, 3000);
+}
+
+// ===== FORMATAÇÃO =====
+const fmt = v => 'R$ ' + Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+const fmtF = v => 'R$ ' + Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtKm = v => Number(v||0).toLocaleString('pt-BR') + ' km';
+const fmtDate = s => { if(!s) return '—'; const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; };
+const today = () => new Date().toISOString().split('T')[0];
+
+// ===== HELPERS =====
+const getEstoque = () => { const v=new Set(D.vendas.map(x=>x.carId)); return D.compras.filter(c=>!v.has(c.id)); };
+const getGastos = id => D.gastos.filter(g=>g.carId===id);
+const totalGastos = id => getGastos(id).reduce((s,g)=>s+g.valor,0);
+const custoReal = c => c.custoTotal + totalGastos(c.id);
+
+// ===== TABS =====
+function showTab(tab, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  if(el) el.classList.add('active');
+  ({
+    dashboard: renderDashboard,
+    compras: renderCompras,
+    vendas: ()=>{ populateSelect('v-carro','estoque'); renderVendas(); },
+    gastos: ()=>{ populateSelect('g-carro','todos'); populateSelect('filtro-gastos-car','todos'); renderGastos(); },
+    estoque: renderEstoque,
+    relatorio: renderRelatorio,
+    acertos: ()=>{ populateAcertoCarro(); renderAcertos(); renderVeredicto(); }
+  })[tab]?.();
+}
+
+// ===== SELECTS =====
+function populateSelect(id, tipo){
+  const el = document.getElementById(id); if(!el) return;
+  const vendidos = new Set(D.vendas.map(v=>v.carId));
+  const lista = tipo==='estoque' ? D.compras.filter(c=>!vendidos.has(c.id)) : D.compras;
+  const placeholder = id==='filtro-gastos-car' ? 'Todos os veículos' : 'Selecione o veículo...';
+  el.innerHTML = `<option value="">${placeholder}</option>`;
+  lista.forEach(c=>{
+    const status = vendidos.has(c.id)?' [vendido]':' [estoque]';
+    el.innerHTML += `<option value="${c.id}">${c.marca} ${c.modelo} ${c.ano||''}${c.placa?' — '+c.placa:''}${tipo==='todos'?status:''} | custo: ${fmt(custoReal(c))}</option>`;
+  });
+}
+
+// ===== TOGGLES =====
+function toggleTrocaVenda(){
+  document.getElementById('v-troca-campos').style.display = document.getElementById('v-tem-troca').checked ? 'block' : 'none';
+  updatePreviewVenda();
+}
+function toggleModalTroca(){
+  document.getElementById('modal-troca-campos').style.display = document.getElementById('modal-tem-troca').checked ? 'block' : 'none';
+  updateModalPreview();
+}
+
+// ===== PREVIEW =====
+function buildPreview(carId, valorDin, comissao, valorTroca){
+  const car = D.compras.find(c=>c.id===carId); if(!car) return null;
+  const gc = totalGastos(carId), cr = car.custoTotal + gc;
+  const receita = valorDin + valorTroca, lucro = receita - cr - comissao;
+  const margem = receita>0 ? ((lucro/receita)*100).toFixed(1) : 0;
+  return {car,gc,cr,receita,lucro,margem};
+}
+
+function previewHTML(p, valorDin, valorTroca, comissao){
+  if(!p) return '';
+  return `
+    <div class="preview-row"><span style="color:var(--muted)">Custo de compra</span><span style="color:var(--red)">${fmtF(p.car.custoTotal)}</span></div>
+    <div class="preview-row"><span style="color:var(--muted)">Gastos adicionais</span><span style="color:var(--purple)">${fmtF(p.gc)}</span></div>
+    <div class="preview-row"><span style="color:var(--muted)">Custo real total</span><span style="color:var(--red);font-weight:600">${fmtF(p.cr)}</span></div>
+    ${valorTroca>0?`<div class="preview-row"><span style="color:var(--muted)">Troca recebida</span><span style="color:var(--purple)">+ ${fmtF(valorTroca)}</span></div>`:''}
+    <div class="preview-row"><span style="color:var(--muted)">Valor em dinheiro</span><span style="color:var(--green)">+ ${fmtF(valorDin)}</span></div>
+    <div class="preview-row"><span style="color:var(--muted)">Receita total</span><span style="color:var(--green)">${fmtF(p.receita)}</span></div>
+    ${comissao>0?`<div class="preview-row"><span style="color:var(--muted)">Comissão</span><span style="color:var(--red)">− ${fmtF(comissao)}</span></div>`:''}
+    <div class="preview-row"><span>💰 Lucro líquido</span><span style="color:${p.lucro>=0?'var(--green)':'var(--red)'}"><b>${fmtF(p.lucro)} (${p.margem}%)</b></span></div>`;
+}
+
+function updatePreviewVenda(){
+  const carId=parseInt(document.getElementById('v-carro').value)||0;
+  const valorDin=parseFloat(document.getElementById('v-valor').value)||0;
+  const comissao=parseFloat(document.getElementById('v-comissao').value)||0;
+  const temTroca=document.getElementById('v-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('vt-valor').value)||0):0;
+  const prev=document.getElementById('preview-lucro-venda');
+  const p=buildPreview(carId,valorDin,comissao,valorTroca);
+  if(p&&(valorDin>0||valorTroca>0)){prev.style.display='block';prev.innerHTML=`<div class="preview-box">${previewHTML(p,valorDin,valorTroca,comissao)}</div>`;}
+  else prev.style.display='none';
+}
+
+function updateModalPreview(){
+  const carId=parseInt(document.getElementById('modal-car-id').value)||0;
+  const valorDin=parseFloat(document.getElementById('modal-valor').value)||0;
+  const comissao=parseFloat(document.getElementById('modal-comissao').value)||0;
+  const temTroca=document.getElementById('modal-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('mt-valor').value)||0):0;
+  const prev=document.getElementById('modal-preview');
+  const p=buildPreview(carId,valorDin,comissao,valorTroca);
+  if(p){prev.style.display='block';prev.innerHTML=previewHTML(p,valorDin,valorTroca,comissao);}
+  else prev.style.display='none';
+}
+
+function updateEditVendaPreview(){
+  const idx=parseInt(document.getElementById('edit-venda-idx').value);
+  const v=D.vendas[idx]; if(!v) return;
+  const carId=v.carId;
+  const valorDin=parseFloat(document.getElementById('edit-v-valor').value)||0;
+  const valorTroca=parseFloat(document.getElementById('edit-v-troca').value)||0;
+  const comissao=parseFloat(document.getElementById('edit-v-comissao').value)||0;
+  const prev=document.getElementById('edit-venda-preview');
+  const p=buildPreview(carId,valorDin,comissao,valorTroca);
+  if(p){prev.style.display='block';prev.innerHTML=previewHTML(p,valorDin,valorTroca,comissao);}
+  else prev.style.display='none';
+}
+
+// ===== REGISTRAR COMPRA =====
+function registrarCompra(){
+  const marca=document.getElementById('c-marca').value.trim();
+  const modelo=document.getElementById('c-modelo').value.trim();
+  const valor=parseFloat(document.getElementById('c-valor').value)||0;
+  const dataC=document.getElementById('c-data').value;
+  if(!marca||!modelo||!valor||!dataC){toast('Preencha: Marca, Modelo, Valor e Data.','err');return;}
+  const custo=parseFloat(document.getElementById('c-custo').value)||0;
+  const isTroca=document.getElementById('c-is-troca').checked;
+  D.compras.push({
+    id:NID++, marca, modelo,
+    ano:parseInt(document.getElementById('c-ano').value)||0,
+    cor:document.getElementById('c-cor').value.trim(),
+    placa:document.getElementById('c-placa').value.trim().toUpperCase(),
+    km:parseInt(document.getElementById('c-km').value)||0,
+    valor, custoPrep:custo, custoTotal:valor+custo,
+    data:dataC, vendedor:document.getElementById('c-vendedor').value.trim(),
+    obs:document.getElementById('c-obs').value.trim(),
+    origemTroca:isTroca,
+    valorTroca:isTroca?(parseFloat(document.getElementById('c-valor-troca').value)||0):0,
+    refVenda:isTroca?document.getElementById('c-ref-venda').value.trim():''
+  });
+  save();
+  ['c-marca','c-modelo','c-ano','c-cor','c-placa','c-km','c-valor','c-vendedor','c-obs','c-valor-troca','c-ref-venda'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('c-custo').value='0'; document.getElementById('c-is-troca').checked=false;
+  document.getElementById('c-troca-campos').style.display='none'; document.getElementById('c-data').value=today();
+  renderCompras(); renderDashboard(); toast('✅ Compra registrada!');
+}
+
+// ===== EDITAR COMPRA =====
+function abrirEditarCompra(id){
+  const c=D.compras.find(x=>x.id===id); if(!c) return;
+  document.getElementById('edit-compra-id').value=id;
+  document.getElementById('edit-c-marca').value=c.marca||'';
+  document.getElementById('edit-c-modelo').value=c.modelo||'';
+  document.getElementById('edit-c-ano').value=c.ano||'';
+  document.getElementById('edit-c-cor').value=c.cor||'';
+  document.getElementById('edit-c-placa').value=c.placa||'';
+  document.getElementById('edit-c-km').value=c.km||'';
+  document.getElementById('edit-c-valor').value=c.valor||'';
+  document.getElementById('edit-c-custo').value=c.custoPrep||'';
+  document.getElementById('edit-c-data').value=c.data||'';
+  document.getElementById('edit-c-vendedor').value=c.vendedor||'';
+  document.getElementById('edit-c-obs').value=c.obs||'';
+  document.getElementById('modal-edit-compra').classList.add('open');
+}
+
+function salvarEdicaoCompra(){
+  const id=parseInt(document.getElementById('edit-compra-id').value);
+  const idx=D.compras.findIndex(c=>c.id===id); if(idx<0) return;
+  const c=D.compras[idx];
+  const marca=document.getElementById('edit-c-marca').value.trim();
+  const modelo=document.getElementById('edit-c-modelo').value.trim();
+  const valor=parseFloat(document.getElementById('edit-c-valor').value)||0;
+  const custo=parseFloat(document.getElementById('edit-c-custo').value)||0;
+  if(!marca||!modelo){toast('Marca e Modelo são obrigatórios.','err');return;}
+  D.compras[idx]={
+    ...c, marca, modelo,
+    ano:parseInt(document.getElementById('edit-c-ano').value)||c.ano,
+    cor:document.getElementById('edit-c-cor').value.trim(),
+    placa:document.getElementById('edit-c-placa').value.trim().toUpperCase(),
+    km:parseInt(document.getElementById('edit-c-km').value)||0,
+    valor, custoPrep:custo, custoTotal:valor+custo,
+    data:document.getElementById('edit-c-data').value||c.data,
+    vendedor:document.getElementById('edit-c-vendedor').value.trim(),
+    obs:document.getElementById('edit-c-obs').value.trim()
+  };
+  save(); fecharModal('modal-edit-compra');
+  renderCompras(); renderEstoque(); renderDashboard();
+  toast('✅ Dados atualizados com sucesso!');
+}
+
+// ===== EXCLUSÃO DE COMPRA =====
+function abrirExclusaoCompra(id){
+  const c=D.compras.find(x=>x.id===id); if(!c) return;
+  const vendido=D.vendas.some(v=>v.carId===id);
+  if(vendido){toast('Não é possível excluir: há venda vinculada. Desfaça a venda primeiro.','err');return;}
+  document.getElementById('del-compra-id').value=id;
+  document.getElementById('del-compra-info').innerHTML=`<b>${c.marca} ${c.modelo} ${c.ano}</b>${c.placa?' — '+c.placa:''}<br>Valor pago: ${fmtF(c.valor)} | Gastos: ${fmtF(totalGastos(id))}`;
+  document.getElementById('modal-del-compra').classList.add('open');
+}
+
+function confirmarExclusaoCompra(){
+  const id=parseInt(document.getElementById('del-compra-id').value);
+  D.compras=D.compras.filter(c=>c.id!==id);
+  D.gastos=D.gastos.filter(g=>g.carId!==id);
+  save(); fecharModal('modal-del-compra');
+  renderCompras(); renderDashboard(); toast('🗑️ Compra excluída.');
+}
+
+// ===== REGISTRAR VENDA =====
+function registrarVenda(){
+  const carId=parseInt(document.getElementById('v-carro').value)||0;
+  const valorDin=parseFloat(document.getElementById('v-valor').value)||0;
+  const dataV=document.getElementById('v-data').value;
+  const temTroca=document.getElementById('v-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('vt-valor').value)||0):0;
+  if(!carId||!dataV||(valorDin===0&&valorTroca===0)){toast('Preencha veículo, data e valor.','err');return;}
+  const comissao=parseFloat(document.getElementById('v-comissao').value)||0;
+  const car=D.compras.find(c=>c.id===carId);
+  const gc=totalGastos(carId), cr=custoReal(car);
+  const receita=valorDin+valorTroca, lucro=receita-cr-comissao;
+  let trocaCarId=null;
+  if(temTroca&&document.getElementById('vt-marca').value.trim()){
+    trocaCarId=NID++;
+    D.compras.push({
+      id:trocaCarId, marca:document.getElementById('vt-marca').value.trim(),
+      modelo:document.getElementById('vt-modelo').value.trim(),
+      ano:parseInt(document.getElementById('vt-ano').value)||0, cor:'',
+      placa:document.getElementById('vt-placa').value.trim().toUpperCase(),
+      km:parseInt(document.getElementById('vt-km').value)||0,
+      valor:valorTroca, custoPrep:0, custoTotal:valorTroca,
+      data:dataV, vendedor:document.getElementById('v-comprador').value.trim(),
+      obs:`Recebido como troca na venda do ${car.marca} ${car.modelo} ${car.ano}`,
+      origemTroca:true, valorTroca, refVenda:`${car.marca} ${car.modelo} ${car.ano}`
+    });
+  }
+  D.vendas.push({carId,valorDin,valorTroca,receita,data:dataV,comprador:document.getElementById('v-comprador').value.trim(),pagamento:document.getElementById('v-pagamento').value,comissao,obs:document.getElementById('v-obs').value.trim(),lucro,gc,trocaCarId});
+  save();
+  ['v-valor','v-data','v-comprador','v-comissao','v-obs','vt-marca','vt-modelo','vt-ano','vt-placa','vt-km','vt-valor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('v-carro').value=''; document.getElementById('v-comissao').value='0';
+  document.getElementById('v-tem-troca').checked=false; document.getElementById('v-troca-campos').style.display='none';
+  document.getElementById('preview-lucro-venda').style.display='none'; document.getElementById('v-data').value=today();
+  renderVendas(); renderDashboard();
+  toast(trocaCarId?`✅ Venda registrada! Lucro: ${fmtF(lucro)} — 🔄 Troca adicionada ao estoque!`:`✅ Venda registrada! Lucro: ${fmtF(lucro)}`);
+}
+
+// ===== EDITAR VENDA =====
+function abrirEditarVenda(idx){
+  const v=D.vendas[idx]; if(!v) return;
+  const car=D.compras.find(c=>c.id===v.carId);
+  document.getElementById('edit-venda-idx').value=idx;
+  document.getElementById('edit-venda-car-info').innerHTML=`Veículo: <b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b> | Custo real: <b>${fmtF(custoReal(car||{custoTotal:0,id:-1}))}</b>`;
+  document.getElementById('edit-v-valor').value=v.valorDin||0;
+  document.getElementById('edit-v-troca').value=v.valorTroca||0;
+  document.getElementById('edit-v-comissao').value=v.comissao||0;
+  document.getElementById('edit-v-data').value=v.data||'';
+  document.getElementById('edit-v-comprador').value=v.comprador||'';
+  document.getElementById('edit-v-pagamento').value=v.pagamento||'Dinheiro';
+  document.getElementById('edit-v-obs').value=v.obs||'';
+  document.getElementById('edit-venda-preview').style.display='none';
+  document.getElementById('modal-edit-venda').classList.add('open');
+  updateEditVendaPreview();
+}
+
+function salvarEdicaoVenda(){
+  const idx=parseInt(document.getElementById('edit-venda-idx').value);
+  const v=D.vendas[idx]; if(!v) return;
+  const car=D.compras.find(c=>c.id===v.carId);
+  const valorDin=parseFloat(document.getElementById('edit-v-valor').value)||0;
+  const valorTroca=parseFloat(document.getElementById('edit-v-troca').value)||0;
+  const comissao=parseFloat(document.getElementById('edit-v-comissao').value)||0;
+  const gc=v.gc||totalGastos(v.carId);
+  const cr=car?custoReal(car):0;
+  const receita=valorDin+valorTroca, lucro=receita-cr-comissao;
+  D.vendas[idx]={
+    ...v, valorDin, valorTroca, receita, comissao, lucro, gc,
+    data:document.getElementById('edit-v-data').value||v.data,
+    comprador:document.getElementById('edit-v-comprador').value.trim(),
+    pagamento:document.getElementById('edit-v-pagamento').value,
+    obs:document.getElementById('edit-v-obs').value.trim()
+  };
+  save(); fecharModal('modal-edit-venda');
+  renderVendas(); renderDashboard(); toast('✅ Venda atualizada!');
+}
+
+// ===== DESFAZER/EXCLUIR VENDA =====
+function abrirExclusaoVenda(idx){
+  const v=D.vendas[idx]; if(!v) return;
+  const car=D.compras.find(c=>c.id===v.carId);
+  document.getElementById('del-venda-idx').value=idx;
+  const trocaInfo = v.trocaCarId ? ` | Troca recebida: ${(D.compras.find(c=>c.id===v.trocaCarId)||{marca:'?',modelo:''}).marca} ${(D.compras.find(c=>c.id===v.trocaCarId)||{marca:'',modelo:'?'}).modelo}` : '';
+  document.getElementById('del-venda-info').innerHTML=`Veículo: <b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b><br>Comprador: ${v.comprador||'—'} | Data: ${fmtDate(v.data)} | Receita: ${fmtF(v.receita)}${trocaInfo}`;
+  document.getElementById('modal-del-venda').classList.add('open');
+}
+
+function confirmarExclusaoVenda(){
+  const idx=parseInt(document.getElementById('del-venda-idx').value);
+  const v=D.vendas[idx]; if(!v) return;
+  // Remove carro da troca do estoque se não foi vendido
+  if(v.trocaCarId){
+    const trocaVendida=D.vendas.some((x,i)=>i!==idx&&x.carId===v.trocaCarId);
+    if(!trocaVendida){ D.compras=D.compras.filter(c=>c.id!==v.trocaCarId); D.gastos=D.gastos.filter(g=>g.carId!==v.trocaCarId); }
+  }
+  D.vendas.splice(idx,1); save(); fecharModal('modal-del-venda');
+  renderVendas(); renderDashboard(); toast('🗑️ Venda desfeita. Veículo retornou ao estoque.');
+}
+
+// ===== GASTOS =====
+function registrarGasto(){
+  const carId=parseInt(document.getElementById('g-carro').value)||0;
+  const valor=parseFloat(document.getElementById('g-valor').value)||0;
+  const dataG=document.getElementById('g-data').value;
+  if(!carId||!valor||!dataG){toast('Preencha: Veículo, Valor e Data.','err');return;}
+  D.gastos.push({id:NID++,carId,categoria:document.getElementById('g-categoria').value,desc:document.getElementById('g-desc').value.trim(),valor,data:dataG,fornecedor:document.getElementById('g-fornecedor').value.trim()});
+  save();
+  ['g-desc','g-valor','g-fornecedor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('g-carro').value=''; document.getElementById('g-data').value=today();
+  renderGastos(); renderDashboard(); toast('✅ Gasto registrado!');
+}
+
+function excluirGasto(id){
+  id=parseInt(id);
+  const g=D.gastos.find(x=>x.id===id); if(!g) return;
+  document.getElementById('del-gasto-id').value=id;
+  document.getElementById('del-gasto-info').innerHTML=`<b>${g.categoria}</b> — ${g.desc||'—'}<br>Valor: <b style="color:var(--red)">${fmtF(g.valor)}</b> &nbsp;|&nbsp; ${fmtDate(g.data)}`;
+  document.getElementById('modal-del-gasto').classList.add('open');
+}
+function confirmarExclusaoGasto(){
+  const id=parseInt(document.getElementById('del-gasto-id').value);
+  D.gastos=D.gastos.filter(g=>g.id!==id);
+  save(); fecharModal('modal-del-gasto'); renderGastos(); renderDashboard();
+}
+
+// ===== MODAL VENDER DO ESTOQUE =====
+function abrirModalVender(carId){
+  const car=D.compras.find(c=>c.id===carId), gc=totalGastos(carId), cr=custoReal(car);
+  document.getElementById('modal-car-id').value=carId;
+  document.getElementById('modal-data').value=today();
+  ['modal-valor','modal-comprador','modal-comissao','mt-marca','mt-modelo','mt-ano','mt-placa','mt-km','mt-valor'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('modal-comissao').value='0';
+  document.getElementById('modal-tem-troca').checked=false;
+  document.getElementById('modal-troca-campos').style.display='none';
+  document.getElementById('modal-preview').style.display='none';
+  document.getElementById('modal-car-info').innerHTML=`<b>${car.marca} ${car.modelo} ${car.ano}</b>${car.placa?' — '+car.placa:''} &nbsp;|&nbsp; Compra: ${fmtF(car.custoTotal)} &nbsp;|&nbsp; Gastos: <span style="color:var(--purple)">${fmtF(gc)}</span> &nbsp;|&nbsp; <b>Custo real: ${fmtF(cr)}</b>`;
+  document.getElementById('modal-vender').classList.add('open');
+}
+
+function confirmarVendaModal(){
+  const carId=parseInt(document.getElementById('modal-car-id').value)||0;
+  const valorDin=parseFloat(document.getElementById('modal-valor').value)||0;
+  const dataV=document.getElementById('modal-data').value;
+  const temTroca=document.getElementById('modal-tem-troca').checked;
+  const valorTroca=temTroca?(parseFloat(document.getElementById('mt-valor').value)||0):0;
+  if(!dataV||(valorDin===0&&valorTroca===0)){toast('Informe data e valor.','err');return;}
+  const comissao=parseFloat(document.getElementById('modal-comissao').value)||0;
+  const car=D.compras.find(c=>c.id===carId);
+  const gc=totalGastos(carId), cr=custoReal(car);
+  const receita=valorDin+valorTroca, lucro=receita-cr-comissao;
+  let trocaCarId=null;
+  if(temTroca&&document.getElementById('mt-marca').value.trim()){
+    trocaCarId=NID++;
+    D.compras.push({
+      id:trocaCarId, marca:document.getElementById('mt-marca').value.trim(),
+      modelo:document.getElementById('mt-modelo').value.trim(),
+      ano:parseInt(document.getElementById('mt-ano').value)||0, cor:'',
+      placa:document.getElementById('mt-placa').value.trim().toUpperCase(),
+      km:parseInt(document.getElementById('mt-km').value)||0,
+      valor:valorTroca, custoPrep:0, custoTotal:valorTroca,
+      data:dataV, vendedor:document.getElementById('modal-comprador').value.trim(),
+      obs:`Recebido como troca na venda do ${car.marca} ${car.modelo} ${car.ano}`,
+      origemTroca:true, valorTroca, refVenda:`${car.marca} ${car.modelo} ${car.ano}`
+    });
+  }
+  D.vendas.push({carId,valorDin,valorTroca,receita,data:dataV,comprador:document.getElementById('modal-comprador').value.trim(),pagamento:document.getElementById('modal-pagamento').value,comissao,obs:'',lucro,gc,trocaCarId});
+  save(); fecharModal('modal-vender');
+  renderEstoque(); renderDashboard();
+  toast(trocaCarId?`✅ Venda confirmada! Lucro: ${fmtF(lucro)} — 🔄 Troca no estoque!`:`✅ Venda confirmada! Lucro: ${fmtF(lucro)}`);
+}
+
+// ===== MODAL GASTOS VIEW =====
+function abrirModalGastos(carId){
+  const car=D.compras.find(c=>c.id===carId), gastos=getGastos(carId), total=totalGastos(carId);
+  document.getElementById('modal-gastos-car-info').innerHTML=`<b>${car.marca} ${car.modelo} ${car.ano}</b>${car.placa?' — '+car.placa:''}`;
+  let html='';
+  if(!gastos.length){html='<div style="color:var(--muted);text-align:center;padding:1.5rem;font-size:0.9rem">Nenhum gasto para este veículo.<br>Vá em <b>🔧 Gastos</b> para adicionar.</div>';}
+  else{
+    gastos.forEach(g=>{
+      html+=`<div class="gasto-item"><div class="gasto-item-left"><div class="gasto-item-desc">${g.desc||g.categoria}</div><div class="gasto-item-meta"><span class="badge badge-purple" style="font-size:0.7rem">${g.categoria}</span> &nbsp;${fmtDate(g.data)}${g.fornecedor?' • '+g.fornecedor:''}</div></div><div class="gasto-item-val">${fmtF(g.valor)}</div></div>`;
+    });
+    html+=`<div class="gastos-total-row"><span>Total de gastos neste veículo</span><span style="color:var(--red);font-weight:700">${fmtF(total)}</span></div>`;
+  }
+  document.getElementById('modal-gastos-lista').innerHTML=html;
+  document.getElementById('modal-gastos-view').classList.add('open');
+}
+
+function fecharModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// ===== RENDERS =====
+function renderDashboard(){
+  const totalEntradas=D.vendas.reduce((s,v)=>s+v.receita,0);
+  const totalLucro=D.vendas.reduce((s,v)=>s+v.lucro,0);
+  const totalGastosAll=D.gastos.reduce((s,g)=>s+g.valor,0);
+  const estoque=getEstoque();
+  const capitalEst=estoque.reduce((s,c)=>s+c.custoTotal,0);
+  const totalSaidas=D.compras.reduce((s,c)=>s+c.custoTotal,0);
+  document.getElementById('kpi-lucro').textContent=fmt(totalLucro);
+  document.getElementById('kpi-lucro-sub').textContent=`${D.vendas.length} veículos vendidos`;
+  document.getElementById('kpi-entradas').textContent=fmt(totalEntradas);
+  document.getElementById('kpi-entradas-sub').textContent=`${D.vendas.length} vendas`;
+  document.getElementById('kpi-saidas').textContent=fmt(totalSaidas);
+  document.getElementById('kpi-saidas-sub').textContent=`${D.compras.length} compras`;
+  document.getElementById('kpi-gastos-dash').textContent=fmt(totalGastosAll);
+  document.getElementById('kpi-estoque').textContent=estoque.length;
+  document.getElementById('kpi-estoque-sub').textContent=`investido: ${fmt(capitalEst)}`;
+
+  const movs=[];
+  D.compras.forEach(c=>movs.push({tipo:c.origemTroca?'troca':'compra',data:c.data,desc:`${c.marca} ${c.modelo} ${c.ano}`,valor:c.custoTotal}));
+  D.vendas.forEach(v=>{const car=D.compras.find(c=>c.id===v.carId);if(car)movs.push({tipo:'venda',data:v.data,desc:`${car.marca} ${car.modelo} ${car.ano}`,valor:v.receita,lucro:v.lucro});});
+  D.gastos.forEach(g=>{const car=D.compras.find(c=>c.id===g.carId);if(car)movs.push({tipo:'gasto',data:g.data,desc:`${car.marca} ${car.modelo} — ${g.categoria}`,valor:g.valor});});
+  movs.sort((a,b)=>b.data.localeCompare(a.data));
+  const bm={venda:'green',compra:'red',troca:'purple',gasto:'yellow'};
+  const lm={venda:'VENDA',compra:'COMPRA',troca:'TROCA',gasto:'GASTO'};
+  const cont=document.getElementById('tabela-movimentacoes');
+  if(!movs.length){cont.innerHTML='<div class="empty-state"><div class="icon">📋</div>Nenhuma movimentação.</div>';return;}
+  cont.innerHTML=`<div style="overflow-x:auto"><table><thead><tr><th>Tipo</th><th>Descrição</th><th>Data</th><th>Valor</th><th>Lucro</th></tr></thead><tbody>${movs.slice(0,20).map(m=>`<tr><td><span class="badge badge-${bm[m.tipo]}">${lm[m.tipo]}</span></td><td>${m.desc}</td><td>${fmtDate(m.data)}</td><td class="${m.tipo==='venda'?'profit-pos':'profit-neg'}">${m.tipo==='venda'?'+':'−'}${fmt(m.valor)}</td><td>${m.tipo==='venda'?`<span class="${m.lucro>=0?'profit-pos':'profit-neg'}">${fmt(m.lucro)}</span>`:'—'}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+let _comprasFiltradas = null;
+function renderCompras(lista){
+  // inject filter bar if not present
+  const hdr=document.getElementById('filtro-bar-compras');
+  if(hdr) hdr.innerHTML=renderFiltroBar('compras','aplicarFiltroCompras()');
+  const {mes,ano}=filtrosMes('compras');
+  const tbody=document.getElementById('tbody-compras');
+  let dados=lista||D.compras;
+  dados=dados.filter(c=>dentroDoFiltro(c.data,mes,ano));
+  if(!dados.length){tbody.innerHTML='<tr><td colspan="12"><div class="empty-state"><div class="icon">🛒</div>Nenhuma compra no período.</div></td></tr>';return;}
+  const vendidos=new Set(D.vendas.map(v=>v.carId));
+  tbody.innerHTML=dados.slice().reverse().map(c=>{
+    const gc=totalGastos(c.id), cr=custoReal(c), isVendido=vendidos.has(c.id);
+    return `<tr>
+      <td><b>${c.marca} ${c.modelo}</b></td>
+      <td>${c.placa||'—'}</td><td>${c.ano||'—'}</td><td>${fmtKm(c.km)}</td>
+      <td>${fmt(c.valor)}</td><td>${fmt(c.custoPrep)}</td>
+      <td style="color:var(--purple)">${gc>0?fmt(gc):'—'}</td>
+      <td><b>${fmt(cr)}</b></td>
+      <td>${c.origemTroca?'<span class="badge badge-purple">TROCA</span>':'<span class="badge badge-blue">COMPRA</span>'}</td>
+      <td>${fmtDate(c.data)}</td>
+      <td><span class="badge badge-${isVendido?'green':'yellow'}">${isVendido?'VENDIDO':'ESTOQUE'}</span></td>
+      <td style="white-space:nowrap;display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-blue btn-sm" onclick="abrirEditarCompra(${c.id})">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="abrirExclusaoCompra(${c.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function aplicarFiltroCompras(){ renderCompras(); }
+
+function filtrarTabelaCompras(q){
+  const s=q.toLowerCase();
+  const filtrado=D.compras.filter(c=>`${c.marca} ${c.modelo} ${c.ano} ${c.placa} ${c.cor} ${c.vendedor}`.toLowerCase().includes(s));
+  renderCompras(filtrado);
+}
+
+function renderVendas(lista){
+  populateSelect('v-carro','estoque');
+  const hdr=document.getElementById('filtro-bar-vendas');
+  if(hdr) hdr.innerHTML=renderFiltroBar('vendas','aplicarFiltroVendas()');
+  const {mes,ano}=filtrosMes('vendas');
+  const tbody=document.getElementById('tbody-vendas');
+  let dados=lista||D.vendas;
+  dados=dados.filter(v=>dentroDoFiltro(v.data,mes,ano));
+  if(!dados.length){tbody.innerHTML='<tr><td colspan="11"><div class="empty-state"><div class="icon">💰</div>Nenhuma venda no período.</div></td></tr>';return;}
+  tbody.innerHTML=dados.map(v=>{
+    const realIdx=D.vendas.indexOf(v);
+    const car=D.compras.find(c=>c.id===v.carId);
+    const trocaCar=v.trocaCarId?D.compras.find(c=>c.id===v.trocaCarId):null;
+    return `<tr>
+      <td><b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b></td>
+      <td>${v.comprador||'—'}</td>
+      <td>${fmt(car?.custoTotal||0)}</td>
+      <td style="color:var(--purple)">${(v.gc||0)>0?fmt(v.gc):'—'}</td>
+      <td class="profit-pos">${fmt(v.valorDin)}</td>
+      <td>${v.valorTroca>0?`<span class="badge badge-purple">+${fmt(v.valorTroca)}</span>${trocaCar?`<br><small style="color:var(--muted)">${trocaCar.marca} ${trocaCar.modelo}</small>`:''}`:' — '}</td>
+      <td>${fmt(v.comissao)}</td>
+      <td class="${v.lucro>=0?'profit-pos':'profit-neg'}">${fmt(v.lucro)}</td>
+      <td>${fmtDate(v.data)}</td>
+      <td><span class="badge badge-blue">${v.pagamento}</span></td>
+      <td style="white-space:nowrap;display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-blue btn-sm" onclick="abrirEditarVenda(${realIdx})">✏️</button>
+        <button class="btn btn-success btn-sm" title="Repassar 50% p/ Antônio" onclick="abrirRepasseVenda(${realIdx})">💸 Repassar</button>
+        <button class="btn btn-danger btn-sm" onclick="abrirExclusaoVenda(${realIdx})">↩️</button>
+      </td>
+    </tr>`;
+  }).reverse().join('');
+}
+
+function aplicarFiltroVendas(){ renderVendas(); }
+
+function filtrarTabelaVendas(q){
+  const s=q.toLowerCase();
+  const filtrado=D.vendas.filter(v=>{
+    const car=D.compras.find(c=>c.id===v.carId);
+    return `${car?.marca} ${car?.modelo} ${car?.ano} ${v.comprador} ${v.pagamento}`.toLowerCase().includes(s);
+  });
+  renderVendas(filtrado);
+}
+
+function renderGastos(){
+  populateSelect('g-carro','todos'); populateSelect('filtro-gastos-car','todos');
+  const hdr=document.getElementById('filtro-bar-gastos');
+  if(hdr) hdr.innerHTML=renderFiltroBar('gastos','aplicarFiltroGastos()');
+  const {mes,ano}=filtrosMes('gastos');
+  const filtroId=parseInt(document.getElementById('filtro-gastos-car').value)||0;
+  let lista=filtroId?D.gastos.filter(g=>g.carId===filtroId):D.gastos;
+  lista=lista.filter(g=>dentroDoFiltro(g.data,mes,ano));
+  const tbody=document.getElementById('tbody-gastos');
+  if(!lista.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">🔧</div>Nenhum gasto no período.</div></td></tr>';return;}
+  tbody.innerHTML=lista.slice().reverse().map(g=>{
+    const car=D.compras.find(c=>c.id===g.carId);
+    return `<tr><td><b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b></td><td><span class="badge badge-purple">${g.categoria}</span></td><td>${g.desc||'—'}</td><td class="profit-neg">${fmtF(g.valor)}</td><td>${fmtDate(g.data)}</td><td>${g.fornecedor||'—'}</td><td><button class="btn btn-danger btn-sm" onclick="excluirGasto(${g.id})">🗑</button></td></tr>`;
+  }).join('');
+}
+
+function aplicarFiltroGastos(){ renderGastos(); }
+
+function renderEstoque(){
+  const estoque=getEstoque();
+  const capital=estoque.reduce((s,c)=>s+c.custoTotal,0);
+  const gastosEst=estoque.reduce((s,c)=>s+totalGastos(c.id),0);
+  document.getElementById('est-qtd').textContent=estoque.length;
+  document.getElementById('est-capital').textContent=fmt(capital);
+  document.getElementById('est-gastos').textContent=fmt(gastosEst);
+  document.getElementById('est-custo-real').textContent=fmt(capital+gastosEst);
+  const grid=document.getElementById('estoque-grid');
+  if(!estoque.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">🚗</div>Nenhum veículo em estoque.</div>';return;}
+  renderCards(estoque,grid);
+}
+
+function renderCards(lista,grid){
+  grid.innerHTML=lista.map(c=>{
+    const gc=totalGastos(c.id), cr=custoReal(c), ng=getGastos(c.id).length;
+    return `<div class="car-card">
+      <div class="car-card-top">${c.origemTroca?'🔄':'🚗'}</div>
+      <div class="car-card-body">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <div>
+            <div class="car-card-name">${c.marca} ${c.modelo}</div>
+            <div class="car-card-meta">${c.ano||''} ${c.cor?'• '+c.cor:''} ${c.placa?'• '+c.placa:''}</div>
+            ${c.km?`<div class="car-card-meta">${fmtKm(c.km)}</div>`:''}
+          </div>
+          ${c.origemTroca?'<span class="badge badge-purple" style="font-size:0.7rem;height:fit-content">TROCA</span>':''}
+        </div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:10px">Custo de compra</div>
+        <div class="car-card-price">${fmt(c.custoTotal)}</div>
+        ${gc>0?`<div style="display:flex;justify-content:space-between;font-size:0.82rem;background:rgba(168,85,247,0.08);border-radius:6px;padding:6px 10px;margin-bottom:6px"><span style="color:var(--muted)">Gastos adicionais</span><span style="color:var(--purple);font-weight:600">${fmt(gc)}</span></div>`:''}
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:600;background:var(--surface2);border-radius:6px;padding:7px 10px"><span style="color:var(--muted)">Custo real total</span><span style="color:var(--red)">${fmt(cr)}</span></div>
+        ${c.obs?`<div style="font-size:0.75rem;color:var(--muted);margin-top:8px">${c.obs}</div>`:''}
+      </div>
+      <div class="car-card-footer">
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button class="btn btn-blue btn-sm" onclick="abrirEditarCompra(${c.id})" title="Editar dados">✏️ Editar</button>
+          <button class="btn btn-purple btn-sm" onclick="abrirModalGastos(${c.id})">🔧${ng>0?' ('+ng+')':''}</button>
+        </div>
+        <button class="btn btn-success btn-sm" onclick="abrirModalVender(${c.id})">💰 Vender</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filtrarEstoque(q){
+  const estoque=getEstoque(), s=q.toLowerCase();
+  const filtrado=estoque.filter(c=>`${c.marca} ${c.modelo} ${c.ano} ${c.placa} ${c.cor}`.toLowerCase().includes(s));
+  const grid=document.getElementById('estoque-grid');
+  if(!filtrado.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div>Nenhum resultado.</div>';return;}
+  renderCards(filtrado,grid);
+}
+
+function barChart(arr,colorClass=''){
+  if(!arr.length) return '<div style="color:var(--muted);text-align:center;padding:2rem">Sem dados ainda</div>';
+  const max=Math.max(...arr.map(x=>Math.abs(x.val)),1);
+  return arr.map(x=>`<div class="chart-bar-item"><div class="chart-bar-label"><span>${x.nome}</span><span style="color:${x.val<0?'var(--red)':colorClass?colorClass:'var(--text)'}">${fmt(x.val)}</span></div><div class="chart-bar-bg"><div class="chart-bar-fill ${colorClass}" style="width:${(Math.abs(x.val)/max*100).toFixed(0)}%;${x.val<0?'background:var(--red)':''}"></div></div></div>`).join('');
+}
+
+function renderRelatorio(){
+  const vendas=D.vendas;
+  const totalLucro=vendas.reduce((s,v)=>s+v.lucro,0);
+  const totalReceita=vendas.reduce((s,v)=>s+v.receita,0);
+  const ticket=vendas.length?totalReceita/vendas.length:0;
+  const margMedia=vendas.length?vendas.reduce((s,v)=>s+(v.lucro/Math.max(v.receita,1)*100),0)/vendas.length:0;
+  const totalGastosAll=D.gastos.reduce((s,g)=>s+g.valor,0);
+  const custoMedioReal=D.compras.length?D.compras.reduce((s,c)=>s+custoReal(c),0)/D.compras.length:0;
+  document.getElementById('r-lucro').textContent=fmt(totalLucro);
+  document.getElementById('r-ticket').textContent=fmt(ticket);
+  document.getElementById('r-margem').textContent=margMedia.toFixed(1)+'%';
+  document.getElementById('r-gastos-total').textContent=fmt(totalGastosAll);
+  document.getElementById('r-custo-medio').textContent=fmt(custoMedioReal);
+
+  const lv=vendas.map(v=>{const car=D.compras.find(c=>c.id===v.carId);return{nome:car?`${car.marca} ${car.modelo}`:String(v.carId),val:v.lucro};}).sort((a,b)=>b.val-a.val).slice(0,6);
+  document.getElementById('chart-lucro').innerHTML=barChart(lv,'green');
+
+  const cats={};
+  D.gastos.forEach(g=>{cats[g.categoria]=(cats[g.categoria]||0)+g.valor;});
+  document.getElementById('chart-gastos-cat').innerHTML=barChart(Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>({nome:k,val:v})),'purple');
+
+  const marcas={};
+  D.compras.forEach(c=>{marcas[c.marca]=(marcas[c.marca]||0)+1;});
+  document.getElementById('chart-marcas').innerHTML=barChart(Object.entries(marcas).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>({nome:k,val:v})));
+
+  const tbody=document.getElementById('tbody-relatorio');
+  if(!vendas.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><div class="icon">📊</div>Sem vendas.</div></td></tr>';return;}
+  tbody.innerHTML=vendas.slice().reverse().map(v=>{
+    const car=D.compras.find(c=>c.id===v.carId);
+    const trocaCar=v.trocaCarId?D.compras.find(c=>c.id===v.trocaCarId):null;
+    const marg=v.receita>0?((v.lucro/v.receita)*100).toFixed(1):0;
+    return `<tr><td><b>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</b></td><td>${fmt(car?.custoTotal||0)}</td><td style="color:var(--purple)">${(v.gc||0)>0?fmt(v.gc):'—'}</td><td>${v.valorTroca>0?`<span class="badge badge-purple">+${fmt(v.valorTroca)}</span>${trocaCar?`<br><small>${trocaCar.marca} ${trocaCar.modelo}</small>`:''}`:' — '}</td><td>${fmt(v.valorDin)}</td><td class="profit-pos">${fmt(v.receita)}</td><td>${fmt(v.comissao)}</td><td class="${v.lucro>=0?'profit-pos':'profit-neg'}">${fmt(v.lucro)}</td><td><span class="badge badge-${v.lucro>=0?'green':'red'}">${marg}%</span></td></tr>`;
+  }).join('');
+}
+
+// ===== ACERTOS =====
+
+function populateAcertoCarro(){
+  const sel=document.getElementById('ac-carro');
+  if(!sel) return;
+  sel.innerHTML='<option value="">Nenhum / geral</option>';
+  D.compras.forEach(c=>{
+    const vendido=D.vendas.some(v=>v.carId===c.id);
+    sel.innerHTML+=`<option value="${c.id}">${c.marca} ${c.modelo} ${c.ano||''}${c.placa?' — '+c.placa:''}${vendido?' (vendido)':' (estoque)'}</option>`;
+  });
+}
+
+function onTipoAcertoChange(){
+  // veículo sempre visível — pode ser útil nos dois casos
+  document.getElementById('ac-carro-group').style.display='flex';
+}
+
+function registrarAcerto(){
+  const tipo=document.getElementById('ac-tipo').value;
+  const valor=parseFloat(document.getElementById('ac-valor').value)||0;
+  const data=document.getElementById('ac-data').value;
+  const desc=document.getElementById('ac-desc').value.trim();
+  const carId=parseInt(document.getElementById('ac-carro').value)||0;
+  if(!valor||!data){toast('Preencha Valor e Data.','err');return;}
+
+  const tipoLabels={
+    joao_deve_antonio:'💸 João Devendo Antônio',
+    antonio_deve_joao:'💸 Antônio Devendo João'
+  };
+
+  D.acertos.push({
+    id:NID++, tipo, valor, data, desc, carId,
+    label:tipoLabels[tipo]||tipo,
+    status:'pendente',
+    obsQuitar:'',
+    dataQuitar:''
+  });
+  save();
+  ['ac-valor','ac-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ac-data').value=today();
+  document.getElementById('ac-carro').value='';
+  renderAcertos(); renderVeredicto();
+  toast('✅ Movimentação registrada!');
+}
+
+// Botão rápido "Repassar para Antônio" vindo de uma venda
+function abrirRepasseVenda(vendaIdx){
+  const v=D.vendas[vendaIdx];
+  if(!v){toast('Venda não encontrada.','err');return;}
+  const car=D.compras.find(c=>c.id===v.carId);
+  const parteAntonio=v.lucro/2;
+  if(parteAntonio<=0){
+    toast('Esta venda sem lucro positivo.','err');return;
+  }
+  const acertosTab=Array.from(document.querySelectorAll('.nav-tab')).find(t=>t.textContent.includes('Acertos'));
+  showTab('acertos', acertosTab);
+  setTimeout(()=>{
+    document.getElementById('ac-tipo').value='joao_deve_antonio';
+    onTipoAcertoChange();
+    document.getElementById('ac-valor').value=parteAntonio.toFixed(2);
+    document.getElementById('ac-desc').value=`Repasse 50% lucro — ${car?car.marca+' '+car.modelo+' '+car.ano:'venda #'+vendaIdx}`;
+    document.getElementById('ac-data').value=v.data||today();
+  },50);
+}
+
+function quitarAcerto(id){
+  const ac=D.acertos.find(a=>a.id===id);
+  if(!ac) return;
+  document.getElementById('quitar-ac-id').value=id;
+  document.getElementById('quitar-ac-info').innerHTML=`<b>${ac.label}</b><br>${ac.desc||'—'} &nbsp;|&nbsp; Valor: <b style="color:var(--green)">${fmtF(ac.valor)}</b>`;
+  document.getElementById('quitar-ac-obs').value='';
+  document.getElementById('modal-quitar-acerto').classList.add('open');
+}
+
+function confirmarQuitar(){
+  const id=parseInt(document.getElementById('quitar-ac-id').value);
+  const idx=D.acertos.findIndex(a=>a.id===id);
+  if(idx<0) return;
+  D.acertos[idx].status='quitado';
+  D.acertos[idx].dataQuitar=today();
+  D.acertos[idx].obsQuitar=document.getElementById('quitar-ac-obs').value.trim();
+  save(); fecharModal('modal-quitar-acerto');
+  renderAcertos(); renderVeredicto();
+  toast('✅ Marcado como quitado!');
+}
+
+function excluirAcerto(id){
+  id = parseInt(id);
+  const ac = D.acertos.find(a=>a.id===id);
+  if(!ac){ return; }
+  document.getElementById('del-ac-id').value = id;
+  document.getElementById('del-ac-info').innerHTML =
+    `<b>${ac.label}</b><br>${ac.desc||'—'} &nbsp;|&nbsp; Valor: <b style="color:var(--red)">${fmtF(ac.valor)}</b> &nbsp;|&nbsp; ${fmtDate(ac.data)}`;
+  document.getElementById('modal-del-acerto').classList.add('open');
+}
+
+function confirmarExclusaoAcerto(){
+  const id = parseInt(document.getElementById('del-ac-id').value);
+  D.acertos = D.acertos.filter(a=>a.id!==id);
+  save();
+  fecharModal('modal-del-acerto');
+  renderAcertos();
+  renderVeredicto();
+}
+
+function renderAcertos(){
+  populateAcertoCarro();
+  const hdr=document.getElementById('filtro-bar-acertos');
+  if(hdr) hdr.innerHTML=renderFiltroBar('acertos','aplicarFiltroAcertos()');
+  const {mes,ano}=filtrosMes('acertos');
+  const filtroStatus=document.getElementById('filtro-ac-status')?.value||'';
+  let lista=D.acertos.slice().reverse();
+  if(filtroStatus) lista=lista.filter(a=>a.status===filtroStatus);
+  lista=lista.filter(a=>dentroDoFiltro(a.data,mes,ano));
+  const tbody=document.getElementById('tbody-acertos');
+  if(!lista.length){
+    tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="icon">🤝</div>Nenhuma movimentação no período.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML=lista.map(a=>{
+    const car=a.carId?D.compras.find(c=>c.id===a.carId):null;
+    const isJoaoDeve=a.tipo==='joao_deve_antonio';
+    const badgeClass=isJoaoDeve?'badge-yellow':'badge-blue';
+    const corVal=isJoaoDeve?'var(--accent)':'var(--blue)';
+    return `<tr>
+      <td><span class="badge ${badgeClass}">${a.label}</span></td>
+      <td>${a.desc||'—'}</td>
+      <td>${car?`${car.marca} ${car.modelo} ${car.ano}`:'—'}</td>
+      <td style="color:${corVal};font-weight:700">${fmtF(a.valor)}</td>
+      <td>${fmtDate(a.data)}</td>
+      <td>${a.status==='quitado'
+        ?`<span class="badge badge-green">✅ Quitado${a.dataQuitar?' — '+fmtDate(a.dataQuitar):''}</span>${a.obsQuitar?`<br><small style="color:var(--muted)">${a.obsQuitar}</small>`:''}`
+        :`<span class="badge badge-yellow">⏳ Pendente</span>`}
+      </td>
+      <td style="white-space:nowrap;display:flex;gap:4px">
+        ${a.status==='pendente'?`<button class="btn btn-success btn-sm" onclick="quitarAcerto(${a.id})">✅ Quitar</button>`:''}
+        <button class="btn btn-blue btn-sm" onclick="abrirEditarAcerto(${a.id})">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="excluirAcerto(${a.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function aplicarFiltroAcertos(){ renderAcertos(); renderVeredicto(); }
+
+function renderVeredicto(){
+  // João devendo Antônio (pendente = ainda não quitado)
+  const joaoDeveTotal   = D.acertos.filter(a=>a.tipo==='joao_deve_antonio'  && a.status==='pendente').reduce((s,a)=>s+a.valor,0);
+  // Antônio devendo João (pendente)
+  const antonioDeveTotal= D.acertos.filter(a=>a.tipo==='antonio_deve_joao'  && a.status==='pendente').reduce((s,a)=>s+a.valor,0);
+
+  // Totais gerais (incluindo quitados) para os cards de resumo
+  const joaoDeveTotalGeral   = D.acertos.filter(a=>a.tipo==='joao_deve_antonio').reduce((s,a)=>s+a.valor,0);
+  const antonioDeveTotalGeral= D.acertos.filter(a=>a.tipo==='antonio_deve_joao').reduce((s,a)=>s+a.valor,0);
+  const joaoJaQuitou   = D.acertos.filter(a=>a.tipo==='joao_deve_antonio'  && a.status==='quitado').reduce((s,a)=>s+a.valor,0);
+  const antonioJaQuitou= D.acertos.filter(a=>a.tipo==='antonio_deve_joao'  && a.status==='quitado').reduce((s,a)=>s+a.valor,0);
+
+  // Saldo líquido pendente: positivo = João deve Antônio; negativo = Antônio deve João
+  const saldoLiquido = joaoDeveTotal - antonioDeveTotal;
+
+  // --- Cards ---
+  document.getElementById('a-lucro-share').textContent = fmtF(joaoDeveTotalGeral);
+  document.getElementById('a-deve-gastos').textContent = '✅ ' + fmtF(joaoJaQuitou);
+  document.getElementById('a-repasses').textContent    = fmtF(joaoDeveTotal);
+  document.getElementById('a-quitados').textContent    = fmtF(joaoJaQuitou);
+
+  document.getElementById('j-lucro-share').textContent = fmtF(antonioDeveTotalGeral);
+  document.getElementById('j-gastos-pagos').textContent= '✅ ' + fmtF(antonioJaQuitou);
+  document.getElementById('j-repasses').textContent    = fmtF(antonioDeveTotal);
+  document.getElementById('j-quitados').textContent    = fmtF(antonioJaQuitou);
+
+  // --- Saldo boxes ---
+  const aSaldoBox=document.getElementById('a-saldo-box');
+  const aSaldoVal=document.getElementById('a-saldo-val');
+  const aSaldoLbl=document.getElementById('a-saldo-label');
+  const jSaldoBox=document.getElementById('j-saldo-box');
+  const jSaldoVal=document.getElementById('j-saldo-val');
+  const jSaldoLbl=document.getElementById('j-saldo-label');
+  const veredictoCard=document.getElementById('veredicto-card');
+  const veredictoText=document.getElementById('veredicto-text');
+  const veredictoSub =document.getElementById('veredicto-sub');
+
+  if(Math.abs(saldoLiquido)<0.01){
+    aSaldoBox.className='saldo-box zerado'; aSaldoLbl.textContent='Sem pendências'; aSaldoVal.style.color='var(--muted)'; aSaldoVal.textContent='R$ 0';
+    jSaldoBox.className='saldo-box zerado'; jSaldoLbl.textContent='Sem pendências'; jSaldoVal.style.color='var(--muted)'; jSaldoVal.textContent='R$ 0';
+    veredictoCard.style.borderTop='3px solid var(--green)';
+    veredictoText.textContent='✅ Tudo Acertado Entre os Sócios!';
+    veredictoSub.textContent='Nenhum valor pendente entre Antônio e João.';
+  } else if(saldoLiquido>0){
+    // João deve Antônio
+    aSaldoBox.className='saldo-box receber'; aSaldoLbl.textContent='A receber de João'; aSaldoVal.style.color='var(--green)'; aSaldoVal.textContent=fmtF(saldoLiquido);
+    jSaldoBox.className='saldo-box pagar';   jSaldoLbl.textContent='A pagar p/ Antônio'; jSaldoVal.style.color='var(--red)';   jSaldoVal.textContent=fmtF(saldoLiquido);
+    veredictoCard.style.borderTop='3px solid var(--accent)';
+    veredictoText.textContent=`João deve pagar ${fmtF(saldoLiquido)} para Antônio`;
+    veredictoSub.textContent='Valor líquido pendente após descontar acertos já quitados.';
+  } else {
+    // Antônio deve João
+    const val=Math.abs(saldoLiquido);
+    aSaldoBox.className='saldo-box pagar';   aSaldoLbl.textContent='A pagar p/ João';   aSaldoVal.style.color='var(--red)';   aSaldoVal.textContent=fmtF(val);
+    jSaldoBox.className='saldo-box receber'; jSaldoLbl.textContent='A receber de Antônio'; jSaldoVal.style.color='var(--green)'; jSaldoVal.textContent=fmtF(val);
+    veredictoCard.style.borderTop='3px solid var(--blue)';
+    veredictoText.textContent=`Antônio deve pagar ${fmtF(val)} para João`;
+    veredictoSub.textContent='Valor líquido pendente após descontar acertos já quitados.';
+  }
+}
+
+// ===== EDITAR ACERTO =====
+function abrirEditarAcerto(id){
+  const a=D.acertos.find(x=>x.id===id); if(!a) return;
+  document.getElementById('edit-ac-id').value=id;
+  document.getElementById('edit-ac-tipo').value=a.tipo;
+  document.getElementById('edit-ac-valor').value=a.valor;
+  document.getElementById('edit-ac-data').value=a.data;
+  document.getElementById('edit-ac-desc').value=a.desc||'';
+  // populate carro select
+  const sel=document.getElementById('edit-ac-carro');
+  sel.innerHTML='<option value="">Nenhum / geral</option>';
+  D.compras.forEach(c=>{ sel.innerHTML+=`<option value="${c.id}"${a.carId===c.id?' selected':''}>${c.marca} ${c.modelo} ${c.ano||''}${c.placa?' — '+c.placa:''}</option>`; });
+  document.getElementById('modal-edit-acerto').classList.add('open');
+}
+
+function salvarEdicaoAcerto(){
+  const id=parseInt(document.getElementById('edit-ac-id').value);
+  const idx=D.acertos.findIndex(a=>a.id===id); if(idx<0) return;
+  const tipo=document.getElementById('edit-ac-tipo').value;
+  const valor=parseFloat(document.getElementById('edit-ac-valor').value)||0;
+  const data=document.getElementById('edit-ac-data').value;
+  if(!valor||!data){toast('Preencha Valor e Data.','err');return;}
+  const tipoLabels={joao_deve_antonio:'💸 João Devendo Antônio',antonio_deve_joao:'💸 Antônio Devendo João'};
+  D.acertos[idx]={
+    ...D.acertos[idx], tipo, valor, data,
+    label:tipoLabels[tipo],
+    desc:document.getElementById('edit-ac-desc').value.trim(),
+    carId:parseInt(document.getElementById('edit-ac-carro').value)||0
+  };
+  save(); fecharModal('modal-edit-acerto');
+  renderAcertos(); renderVeredicto();
+  toast('✅ Acerto atualizado!');
+}
+
+// ===== FILTROS DE DATA =====
+function filtrosMes(secao){
+  // Retorna {mes, ano} selecionados para a seção
+  const m=document.getElementById(`filtro-mes-${secao}`)?.value||'';
+  const a=document.getElementById(`filtro-ano-${secao}`)?.value||'';
+  return {mes:m, ano:a};
+}
+
+function dentroDoFiltro(dataStr, mes, ano){
+  if(!mes&&!ano) return true;
+  if(!dataStr) return false;
+  const [y,m]=dataStr.split('-');
+  if(ano&&y!==ano) return false;
+  if(mes&&m!==mes) return false;
+  return true;
+}
+
+function renderFiltroBar(secao, onchange){
+  const anos=new Set();
+  if(secao==='compras') D.compras.forEach(c=>c.data&&anos.add(c.data.split('-')[0]));
+  if(secao==='vendas')  D.vendas.forEach(v=>v.data&&anos.add(v.data.split('-')[0]));
+  if(secao==='gastos')  D.gastos.forEach(g=>g.data&&anos.add(g.data.split('-')[0]));
+  if(secao==='acertos') D.acertos.forEach(a=>a.data&&anos.add(a.data.split('-')[0]));
+  const anosArr=[...anos].sort().reverse();
+  const meses=[['01','Janeiro'],['02','Fevereiro'],['03','Março'],['04','Abril'],['05','Maio'],['06','Junho'],['07','Julho'],['08','Agosto'],['09','Setembro'],['10','Outubro'],['11','Novembro'],['12','Dezembro']];
+  const style=`background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:0.82rem;outline:none;`;
+  return `
+    <select id="filtro-mes-${secao}" style="${style}" onchange="${onchange}">
+      <option value="">Todos os meses</option>
+      ${meses.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}
+    </select>
+    <select id="filtro-ano-${secao}" style="${style}" onchange="${onchange}">
+      <option value="">Todos os anos</option>
+      ${anosArr.map(a=>`<option value="${a}">${a}</option>`).join('')}
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="limparFiltro('${secao}','${onchange}')">✕ Limpar</button>`;
+}
+
+function limparFiltro(secao, onchange){
+  const m=document.getElementById(`filtro-mes-${secao}`);
+  const a=document.getElementById(`filtro-ano-${secao}`);
+  if(m) m.value=''; if(a) a.value='';
+  eval(onchange.replace('()','()'));
+}
+
+// ===== INIT =====
+document.getElementById('headerDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('c-data').value=today();
+document.getElementById('v-data').value=today();
+document.getElementById('g-data').value=today();
+document.getElementById('ac-data').value=today();
+onTipoAcertoChange();
+renderDashboard(); renderCompras();
+['modal-vender','modal-gastos-view','modal-edit-compra','modal-edit-venda','modal-del-venda','modal-del-compra','modal-quitar-acerto','modal-edit-acerto','modal-del-acerto','modal-del-gasto'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)fecharModal(id);});
+});
+
+</script>
+</body>
+</html>
